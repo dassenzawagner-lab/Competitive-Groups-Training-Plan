@@ -172,4 +172,80 @@
 <script>
     let trainingData = null;
     const groups = ["FIG", "FIG_Rekrutt", "Stiege", "Aspirant"];
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    fetch('data.json')
+        .then(res => res.json())
+        .then(data => {
+            trainingData = data;
+            renderWeekButtons();
+            loadWeek(data.trainingswochen[0].id);
+        });
+
+    function renderWeekButtons() {
+        const container = document.getElementById('week-btns');
+        trainingData.trainingswochen.forEach(w => {
+            const btn = document.createElement('button');
+            btn.className = 'week-btn';
+            btn.innerText = w.label;
+            btn.onclick = () => loadWeek(w.id);
+            container.appendChild(btn);
+        });
+    }
+
+    function loadWeek(weekId) {
+        const week = trainingData.trainingswochen.find(w => w.id === weekId);
+        document.getElementById('week-label').innerText = week.label;
+        const body = document.getElementById('schedule-body');
+        body.innerHTML = '';
+
+        groups.forEach(group => {
+            const row = document.createElement('tr');
+            
+            // Group Header Column
+            const groupTd = document.createElement('td');
+            groupTd.className = 'group-cell';
+            groupTd.innerText = group.replace('_', ' ');
+            row.appendChild(groupTd);
+
+            // Day Columns
+            days.forEach(day => {
+                const cell = document.createElement('td');
+                const dayData = week.tage[day] && week.tage[day][group];
+
+                if (dayData) {
+                    cell.className = 'plan-cell';
+                    // Show the first 2 apparatus names as preview
+                    const apparatusNames = Object.keys(dayData).join(', ');
+                    cell.innerHTML = `<strong>${day}</strong><br><small>${apparatusNames}</small>`;
+                    cell.onclick = () => showDetail(weekId, day, group);
+                } else {
+                    cell.className = 'plan-cell empty';
+                    cell.innerText = 'FRI';
+                }
+                row.appendChild(cell);
+            });
+            body.appendChild(row);
+        });
+    }
+
+    function showDetail(weekId, day, groupName) {
+        const week = trainingData.trainingswochen.find(w => w.id === weekId);
+        const data = week.tage[day][groupName];
+        let html = `<h2>${groupName.replace('_',' ')} - ${day}</h2><hr>`;
+        
+        for (let apparatus in data) {
+            html += `<h3>${apparatus.replace('_',' ')}</h3><p>${data[apparatus]}</p>`;
+        }
+        
+        document.getElementById('modal-body').innerHTML = html;
+        document.getElementById('planModal').style.display = 'flex';
+    }
+
+    function closeModal() {
+        document.getElementById('planModal').style.display = 'none';
+    }
+</script>
+
+</body>
+</html>
