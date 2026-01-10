@@ -7,9 +7,9 @@
     <style>
         :root { --dark: #1a2b3c; --bg: #f0f2f5; --cell: #d9e2ec; --accent: #0056b3; }
         body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: #333; }
-        header { background: var(--dark); color: white; padding: 20px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        header { background: var(--dark); color: white; padding: 20px; text-align: center; }
         .week-nav { margin: 20px; display: flex; justify-content: center; gap: 10px; flex-wrap: wrap; }
-        .week-btn { padding: 10px 20px; cursor: pointer; background: white; border: 2px solid var(--dark); border-radius: 6px; font-weight: bold; transition: 0.3s; }
+        .week-btn { padding: 10px 20px; cursor: pointer; background: white; border: 2px solid var(--dark); border-radius: 6px; font-weight: bold; }
         .week-btn.active { background: var(--dark); color: white; }
         
         .table-wrapper { overflow-x: auto; padding: 20px; }
@@ -19,13 +19,12 @@
         
         .group-header { background: #e2e8f0; font-weight: bold; padding: 15px; border-radius: 6px; text-align: center; }
         
-        .slot { background: var(--cell); border-radius: 6px; padding: 8px; vertical-align: top; text-align: left; min-height: 120px; border: 1px solid #c0cbd8; }
-        .slot.free { background: #e0e0e0; color: #888; text-align: center; vertical-align: middle; font-weight: bold; font-size: 0.9em; }
+        .slot { background: var(--cell); border-radius: 6px; padding: 8px; vertical-align: top; text-align: left; min-height: 140px; border: 1px solid #c0cbd8; }
+        .slot.free { background: #e0e0e0; color: #888; text-align: center; vertical-align: middle; font-weight: bold; }
         
         .apparatus-item { 
             display: block; background: rgba(255,255,255,0.7); margin: 5px 0; padding: 8px; border-radius: 4px; 
             font-size: 0.8em; cursor: pointer; border-left: 4px solid var(--accent); transition: 0.2s;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
         .apparatus-item:hover { background: white; transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.1); }
         .time-label { font-weight: bold; display: block; color: var(--accent); font-size: 0.85em; margin-bottom: 2px; }
@@ -33,22 +32,20 @@
         .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 550px; width: 90%; position: relative; }
         .close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; }
-        
-        @media print { .no-print { display: none; } .modal { display: block; position: relative; } }
     </style>
 </head>
 <body>
 
-<header class="no-print">
+<header>
     <h1>Competitive Groups Training Plan</h1>
-    <div id="week-display" style="margin-top:10px; font-weight: bold; letter-spacing: 1px;">Week 5</div>
+    <div id="week-display" style="margin-top:10px; font-weight: bold; letter-spacing: 1px;">Week 3</div>
 </header>
 
-<div class="week-nav no-print">
-    <button class="week-btn active" onclick="changeWeek('Week_5', this)">Week 5</button>
+<div class="week-nav">
+    <button class="week-btn active" onclick="changeWeek('Week_3', this)">Week 3</button>
+    <button class="week-btn" onclick="changeWeek('Week_4', this)">Week 4</button>
+    <button class="week-btn" onclick="changeWeek('Week_5', this)">Week 5</button>
     <button class="week-btn" onclick="changeWeek('Week_6', this)">Week 6</button>
-    <button class="week-btn" onclick="changeWeek('Week_7', this)">Week 7</button>
-    <button class="week-btn" onclick="changeWeek('Week_8', this)">Week 8</button>
 </div>
 
 <div class="table-wrapper">
@@ -56,7 +53,7 @@
         <thead>
             <tr>
                 <th>Group</th>
-                <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
+                <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
             </tr>
         </thead>
         <tbody id="schedule-body"></tbody>
@@ -67,7 +64,7 @@
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
         <div id="modal-content-area"></div>
-        <button class="no-print" onclick="window.print()" style="margin-top:25px; width:100%; padding:12px; cursor:pointer; background: #28a745; color:white; border:none; border-radius:6px; font-weight:bold;">Print Details</button>
+        <button onclick="window.print()" style="margin-top:25px; width:100%; padding:12px; cursor:pointer; background: #28a745; color:white; border:none; border-radius:6px; font-weight:bold;">Print Details</button>
     </div>
 </div>
 
@@ -95,4 +92,61 @@
         "Aspirant": {
             "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Floor/Vault", "17:00-17:45 Beam", "17:45-18:30 Bars", "18:30-19:00 Strength/condit."],
             "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Bars", "16:45-17:30 Beam", "17:30-18:15 Vault", "18:15-19:00 Strength/condit."],
-            "Thursday": ["15
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Beam", "17:00-17:45 Bars", "17:45-18:30 Floor", "18:30-19:00 Strength/condit."]
+        }
+    };
+
+    let currentWeek = "Week_3";
+    let trainingDetails = {};
+    const groups = ["FIG", "FIG_Rekrutt", "Stiege", "Aspirant"];
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    function renderTable() {
+        const body = document.getElementById('schedule-body');
+        body.innerHTML = '';
+        groups.forEach(group => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td class="group-header">${group.replace('_',' ')}</td>`;
+            days.forEach(day => {
+                const td = document.createElement('td');
+                const slots = rawSchedule[group][day];
+                if (slots) {
+                    td.className = 'slot';
+                    slots.forEach(s => {
+                        const div = document.createElement('div');
+                        div.className = 'apparatus-item';
+                        div.innerHTML = `<span class="time-label">${s.split(' ')[0]}</span>${s.split(' ').slice(1).join(' ')}`;
+                        div.onclick = () => openModal(group, day, s);
+                        td.appendChild(div);
+                    });
+                } else {
+                    td.className = 'slot free';
+                    td.innerText = 'FRI';
+                }
+                tr.appendChild(td);
+            });
+            body.appendChild(tr);
+        });
+    }
+
+    fetch('data.json').then(r => r.json()).then(d => { trainingDetails = d; }).finally(() => renderTable());
+
+    function changeWeek(week, btn) {
+        currentWeek = week;
+        document.getElementById('week-display').innerText = week.replace('_', ' ');
+        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        renderTable();
+    }
+
+    function openModal(group, day, slot) {
+        let text = "No training plan written yet.";
+        if(trainingDetails[currentWeek]?.[group]?.[day]?.[slot]) text = trainingDetails[currentWeek][group][day][slot];
+        document.getElementById('modal-content-area').innerHTML = `<h3>${slot}</h3><p>${text}</p>`;
+        document.getElementById('planModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('planModal').style.display = 'none'; }
+</script>
+</body>
+</html>
