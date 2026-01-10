@@ -3,52 +3,51 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Apparatus Training Plan</title>
+    <title>Competitive Groups Training Plan</title>
     <style>
-        :root { --dark-blue: #1a2b3c; --bg: #f4f7f6; --cell: #d9e2ec; }
-        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; text-align: center; }
-        header { background: var(--dark-blue); color: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
-        .week-nav { margin: 20px; }
-        .week-btn { padding: 10px 15px; margin: 5px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 4px; }
+        :root { --dark: #1a2b3c; --bg: #f0f2f5; --cell: #d9e2ec; --accent: #0056b3; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; color: #333; }
+        header { background: var(--dark); color: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .week-nav { margin: 20px; display: flex; justify-content: center; gap: 10px; }
+        .week-btn { padding: 10px 20px; cursor: pointer; background: white; border: 2px solid var(--dark); border-radius: 6px; font-weight: bold; }
+        .week-btn.active { background: var(--dark); color: white; }
         
         .table-wrapper { overflow-x: auto; padding: 20px; }
-        table { width: 100%; border-collapse: separate; border-spacing: 5px; min-width: 1000px; }
-        th { color: var(--dark-blue); text-transform: uppercase; font-size: 0.9em; padding: 10px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 6px; min-width: 1000px; }
+        th { color: var(--dark); text-transform: uppercase; font-size: 0.85em; padding: 10px; }
+        .group-header { background: #e2e8f0; font-weight: bold; padding: 15px; border-radius: 6px; width: 130px; }
         
-        .group-header { background: #eceff1; font-weight: bold; padding: 15px; border-radius: 5px; min-width: 120px; }
+        .slot { background: var(--cell); border-radius: 6px; padding: 8px; vertical-align: top; text-align: left; min-height: 120px; }
+        .slot.free { background: #e0e0e0; color: #888; text-align: center; vertical-align: middle; font-weight: bold; }
         
-        .slot { 
-            background: var(--cell); border-radius: 5px; padding: 10px; 
-            vertical-align: top; text-align: left; font-size: 0.75em; 
-            min-height: 100px; transition: 0.2s;
+        .apparatus-item { 
+            display: block; background: rgba(255,255,255,0.6); margin: 4px 0; padding: 6px; border-radius: 4px; 
+            font-size: 0.75em; cursor: pointer; border-left: 4px solid var(--accent); transition: 0.2s;
         }
-        .slot:hover { background: #bcccdc; }
-        .slot.free { background: #eee; color: #999; text-align: center; vertical-align: middle; }
-        
-        .device-link { 
-            display: block; background: rgba(255,255,255,0.5); 
-            margin: 3px 0; padding: 4px; border-radius: 3px; 
-            text-decoration: none; color: #000; font-weight: 500;
-            cursor: pointer; border-left: 3px solid var(--dark-blue);
-        }
-        .device-link:hover { background: white; }
+        .apparatus-item:hover { background: white; transform: translateX(3px); }
+        .time-label { font-weight: bold; display: block; color: var(--accent); margin-bottom: 2px; }
 
         /* Modal */
-        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; text-align: left; position: relative; }
-        .close { position: absolute; top: 10px; right: 20px; font-size: 25px; cursor: pointer; }
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.85); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 12px; max-width: 550px; width: 90%; position: relative; box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .close { position: absolute; top: 15px; right: 20px; font-size: 28px; cursor: pointer; color: #666; }
         
-        @media print { .no-print { display: none; } .modal { display: block; position: relative; } }
+        @media print { .no-print { display: none; } .modal { display: block; position: relative; box-shadow: none; } }
     </style>
 </head>
 <body>
 
 <header class="no-print">
-    <h1>APPARATUS TRAINING PLAN</h1>
-    <div id="current-week-display">Select a Week</div>
+    <h1>Competitive Groups Training Plan</h1>
+    <div id="week-display" style="margin-top:10px; opacity:0.8;">Select a Week</div>
 </header>
 
-<div class="week-nav no-print" id="week-btns"></div>
+<div class="week-nav no-print">
+    <button class="week-btn active" onclick="changeWeek('Week_5', this)">Week 5</button>
+    <button class="week-btn" onclick="changeWeek('Week_6', this)">Week 6</button>
+    <button class="week-btn" onclick="changeWeek('Week_7', this)">Week 7</button>
+    <button class="week-btn" onclick="changeWeek('Week_8', this)">Week 8</button>
+</div>
 
 <div class="table-wrapper">
     <table>
@@ -65,76 +64,41 @@
 <div id="planModal" class="modal">
     <div class="modal-content">
         <span class="close" onclick="closeModal()">&times;</span>
-        <div id="modal-body"></div>
-        <button class="no-print" onclick="window.print()" style="margin-top:20px; width:100%; padding:10px; cursor:pointer; background: #28a745; color:white; border:none; border-radius:5px;">Print / Save PDF</button>
+        <div id="modal-content-area"></div>
+        <button class="no-print" onclick="window.print()" style="margin-top:25px; width:100%; padding:12px; cursor:pointer; background: #28a745; color:white; border:none; border-radius:6px; font-weight:bold;">Print Details / Save as PDF</button>
     </div>
 </div>
 
 <script>
-    let db = null;
+    // --- FESTES ZEITPLAN-GERÜST ---
+    const rawSchedule = {
+        "FIG": {
+            "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Beam", "17:45-18:30 Floor", "18:30-19:30 Strength/condit."],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/beam", "18:00-18:30 Fysio/stretch"],
+            "Saturday": ["09:00-10:00 Warm up", "10:00-10:45 Bars", "10:45-11:30 Beam", "11:30-12:15 Vault/floor", "12:15-13:00 Strength/condit."]
+        },
+        "FIG_Rekrutt": {
+            "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Vault/Floor", "17:00-17:45 Bars", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Beam", "16:45-17:30 Floor", "17:30-18:15 Bars/Straps", "18:15-18:30 Strength/Stretch"],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Bars/Straps", "17:00-17:45 Vault", "17:45-18:30 Beam/Basics", "18:30-19:30 Strength/condit."],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/Beam", "18:00-18:30 Physio/Stretch"]
+        },
+        "Stiege": {
+            "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Beam", "17:00-17:45 Bars", "17:45-18:30 Vault", "18:30-19:00 Strength/condit."],
+            "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Floor", "16:45-17:30 Bars", "17:30-18:15 Beam", "18:15-19:00 Strength/condit."],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Vault", "17:00-17:45 Beam", "17:45-18:30 Bars", "18:30-19:00 Strength/condit."],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basics", "16:30-17:15 Beam", "17:15-18:00 Bars", "18:00-18:45 Floor", "18:45-19:00 Stretch"]
+        },
+        "Aspirant": {
+            "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Floor/Vault", "17:00-17:45 Beam", "17:45-18:30 Bars", "18:30-19:00 Strength/condit."],
+            "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Bars", "16:45-17:30 Beam", "17:30-18:15 Vault", "18:15-19:00 Strength/condit."],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Beam", "17:00-17:45 Bars", "17:45-18:30 Floor", "18:30-19:00 Strength/condit."]
+        }
+    };
+
+    let currentWeek = "Week_5";
+    let trainingDetails = {};
     const groups = ["FIG", "FIG_Rekrutt", "Stiege", "Aspirant"];
-    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-
-    fetch('data.json').then(r => r.json()).then(data => {
-        db = data;
-        renderNav();
-        loadWeek(db.trainingswochen[0].id);
-    });
-
-    function renderNav() {
-        const nav = document.getElementById('week-btns');
-        db.trainingswochen.forEach(w => {
-            const b = document.createElement('button');
-            b.className = 'week-btn';
-            b.innerText = w.label;
-            b.onclick = () => loadWeek(w.id);
-            nav.appendChild(b);
-        });
-    }
-
-    function loadWeek(id) {
-        const w = db.trainingswochen.find(x => x.id === id);
-        document.getElementById('current-week-display').innerText = w.label;
-        const body = document.getElementById('schedule-body');
-        body.innerHTML = '';
-
-        groups.forEach(group => {
-            const tr = document.createElement('tr');
-            tr.innerHTML = `<td class="group-header">${group.replace('_',' ')}</td>`;
-            
-            days.forEach(day => {
-                const td = document.createElement('td');
-                const dayData = w.tage[day] ? w.tage[day][group] : null;
-
-                if (dayData) {
-                    td.className = 'slot';
-                    let html = '';
-                    for (let timeDevice in dayData) {
-                        html += `<div class="device-link" onclick="openPlan('${id}','${day}','${group}','${timeDevice}')">${timeDevice}</div>`;
-                    }
-                    td.innerHTML = html;
-                } else {
-                    td.className = 'slot free';
-                    td.innerText = 'FRI';
-                }
-                tr.appendChild(td);
-            });
-            body.appendChild(tr);
-        });
-    }
-
-    function openPlan(wId, day, group, device) {
-        const planText = db.trainingswochen.find(x => x.id === wId).tage[day][group][device];
-        document.getElementById('modal-body').innerHTML = `
-            <small>${group.replace('_',' ')} | ${day}</small>
-            <h2>${device}</h2>
-            <hr>
-            <div style="white-space: pre-wrap; margin-top:15px;">${planText === "..." ? "No detailed plan written yet." : planText}</div>
-        `;
-        document.getElementById('planModal').style.display = 'flex';
-    }
-
-    function closeModal() { document.getElementById('planModal').style.display = 'none'; }
-</script>
-</body>
-</html>
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday
