@@ -1,0 +1,17 @@
+{
+  "trainingswochen": [
+    {
+      "id": "Week 5",
+      "label": "Week 5 (Basic Training)",
+      "tage": {
+        "Monday": {
+          "Elite_Group": {
+            "Warm_Up": "15 min Running\nDynamic Stretching",
+            "Vault": "Handstand entries on vaulting table",
+            "High_Bar": "Giants preparation"
+          }
+        }
+      }
+    }
+  ]
+}
