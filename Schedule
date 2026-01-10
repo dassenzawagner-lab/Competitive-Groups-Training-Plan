@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Competitive Groups Training Plan</title>
+    <style>
+        :root { --primary: #0056b3; --bg: #f8f9fa; --text: #333; }
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 0; background: var(--bg); color: var(--text); line-height: 1.6; }
+        header { background: var(--primary); color: white; padding: 1.5rem; text-align: center; box-shadow: 0 2px 5px rgba(0,0,0,0.2); }
+        .container { max-width: 800px; margin: 20px auto; padding: 0 15px; }
+        .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 15px; margin-top: 20px; }
+        .btn { background: white; border: 1px solid #ddd; padding: 25px 10px; border-radius: 12px; cursor: pointer; 
+               font-weight: bold; transition: all 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.05); text-align: center; }
+        .btn:hover { border-color: var(--primary); color: var(--primary); background: #f0f7ff; }
+        .back-btn { background: #6c757d; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer; margin-bottom: 20px; }
+        .plan-display { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); border-top: 8px solid var(--primary); }
+        .hidden { display: none; }
+        h2 { border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        @media print { .no-print { display: none; } body { background: white; } .plan-display { box-shadow: none; border: none; padding: 0; } }
+    </style>
+</head>
+<body>
+
+<header class="no-print">
+    <h1>Competitive Groups Training Plan</h1>
+</header>
+
+<div class="container">
+    <div id="view-weeks"><h2>Select Week</h2><div id="weeks-grid" class="card-grid"></div></div>
+    
+    <div id="view-days" class="hidden">
+        <button class="back-btn no-print" onclick="showView('view-weeks')">← Back to Weeks</button>
+        <h2 id="header-week">Select Day</h2>
+        <div id="days-grid" class="card-grid"></div>
+    </div>
+
+    <div id="view-groups" class="hidden">
+        <button class="back-btn no-print" onclick="showView('view-days')">← Back to Days</button>
+        <h2 id="header-day">Select Group</h2>
+        <div id="groups-grid" class="card-grid"></div>
+    </div>
+
+    <div id="view-devices" class="hidden">
+        <button class="back-btn no-print" onclick="showView('view-groups')">← Back to Groups</button>
+        <h2 id="header-group">Select Apparatus</h2>
+        <div id="devices-grid" class="card-grid"></div>
+    </div>
+
+    <div id="view-plan" class="hidden">
+        <button class="back-btn no-print" onclick="showView('view-devices')">← Back to Apparatus</button>
+        <div id="plan-content" class="plan-display"></div>
+        <button class="btn no-print" style="width:100%; margin-top:20px; background:#28a745; color:white;" onclick="window.print()">Print Plan / Save as PDF</button>
+    </div>
+</div>
+
+<script>
+    let trainingData = null;
+    let selWeek = "", selDay = "", selGroup = "";
+
+    fetch('data.json')
+        .then(response => response.json())
+        .then(data => {
+            trainingData = data;
+            renderWeeks();
+        })
+        .catch(err => alert("Error: Could not load data.json. Make sure the file exists!"));
+
+    function showView(viewId) {
+        document.querySelectorAll('.container > div').forEach(div => div.classList.add('hidden'));
+        document.getElementById(viewId).classList.remove('hidden');
+    }
+
+    function renderWeeks() {
+        let html = "";
+        trainingData.trainingswochen.forEach(w => {
+            html += `<div class="btn" onclick="selectWeek('${w.id}', '${w.label}')">${w.label}</div>`;
+        });
+        document.getElementById('weeks-grid').innerHTML = html;
+    }
+
+    function selectWeek(id, label) {
+        selWeek = id;
+        document.getElementById('header-week').innerText = label;
+        const wData = trainingData.trainingswochen.find(w => w.id === id);
+        let html = "";
+        // You can translate these days in data.json as well
+        const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+        days.forEach(tag => {
+            if(wData.tage[tag]) html += `<div class="btn" onclick="selectDay('${tag}')">${tag}</div>`;
+        });
+        document.getElementById('days-grid').innerHTML = html;
+        showView('view-days');
+    }
+
+    function selectDay(tag) {
+        selDay = tag;
+        document.getElementById('header-day').innerText = tag;
+        const groups = Object.keys(trainingData.trainingswochen.find(w => w.id === selWeek).tage[tag]);
+        let html = "";
+        groups.forEach(g => {
+            html += `<div class="btn" onclick="selectGroup('${g}')">${g.replace(/_/g, ' ')}</div>`;
+        });
+        document.getElementById('groups-grid').innerHTML = html;
+        showView('view-groups');
+    }
+
+    function selectGroup(g) {
+        selGroup = g;
+        document.getElementById('header-group').innerText = g.replace(/_/g, ' ');
+        const devices = Object.keys(trainingData.trainingswochen.find(w => w.id === selWeek).tage[selDay][g]);
+        let html = "";
+        devices.forEach(d => {
+            html += `<div class="btn" onclick="showPlan('${d}')">${d.replace(/_/g, ' ')}</div>`;
+        });
+        document.getElementById('devices-grid').innerHTML = html;
+        showView('view-devices');
+    }
+
+    function showPlan(dev) {
+        const content = trainingData.trainingswochen.find(w => w.id === selWeek).tage[selDay][selGroup][dev];
+        document.getElementById('plan-content').innerHTML = `
+            <small>${selWeek} | ${selDay} | ${selGroup.replace(/_/g, ' ')}</small>
+            <h1>${dev.replace(/_/g, ' ')}</h1>
+            <div style="white-space: pre-wrap; text-align: left;">${content}</div>
+        `;
+        showView('view-plan');
+    }
+</script>
+</body>
+</html>
