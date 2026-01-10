@@ -5,247 +5,136 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Apparatus Training Plan</title>
     <style>
-        :root {
-            --dark-blue: #1a2b3c;
-            --header-bg: #2c3e50;
-            --cell-bg: #d9e2ec;
-            --text-color: #333;
-            --white: #ffffff;
+        :root { --dark-blue: #1a2b3c; --bg: #f4f7f6; --cell: #d9e2ec; }
+        body { font-family: 'Segoe UI', sans-serif; background: var(--bg); margin: 0; padding: 0; text-align: center; }
+        header { background: var(--dark-blue); color: white; padding: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.2); }
+        .week-nav { margin: 20px; }
+        .week-btn { padding: 10px 15px; margin: 5px; cursor: pointer; background: #2c3e50; color: white; border: none; border-radius: 4px; }
+        
+        .table-wrapper { overflow-x: auto; padding: 20px; }
+        table { width: 100%; border-collapse: separate; border-spacing: 5px; min-width: 1000px; }
+        th { color: var(--dark-blue); text-transform: uppercase; font-size: 0.9em; padding: 10px; }
+        
+        .group-header { background: #eceff1; font-weight: bold; padding: 15px; border-radius: 5px; min-width: 120px; }
+        
+        .slot { 
+            background: var(--cell); border-radius: 5px; padding: 10px; 
+            vertical-align: top; text-align: left; font-size: 0.75em; 
+            min-height: 100px; transition: 0.2s;
         }
+        .slot:hover { background: #bcccdc; }
+        .slot.free { background: #eee; color: #999; text-align: center; vertical-align: middle; }
+        
+        .device-link { 
+            display: block; background: rgba(255,255,255,0.5); 
+            margin: 3px 0; padding: 4px; border-radius: 3px; 
+            text-decoration: none; color: #000; font-weight: 500;
+            cursor: pointer; border-left: 3px solid var(--dark-blue);
+        }
+        .device-link:hover { background: white; }
 
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            margin: 0;
-            background-color: #f0f0f0;
-            color: var(--text-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-
-        header {
-            background-color: var(--dark-blue);
-            color: white;
-            width: 100%;
-            padding: 20px 0;
-            text-align: center;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        .week-selector {
-            margin: 20px;
-            display: flex;
-            gap: 10px;
-        }
-
-        .week-btn {
-            padding: 10px 20px;
-            background: var(--header-bg);
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        .schedule-container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-            overflow-x: auto;
-            max-width: 95%;
-        }
-
-        table {
-            border-collapse: separate;
-            border-spacing: 8px;
-            width: 100%;
-        }
-
-        th {
-            background-color: transparent;
-            color: var(--dark-blue);
-            font-weight: bold;
-            padding: 10px;
-            text-transform: uppercase;
-            font-size: 0.8em;
-        }
-
-        .group-cell {
-            background-color: #eceff1;
-            font-weight: bold;
-            padding: 20px;
-            text-align: center;
-            border-radius: 5px;
-            min-width: 120px;
-        }
-
-        .plan-cell {
-            background-color: var(--cell-bg);
-            border-radius: 5px;
-            padding: 10px;
-            min-width: 140px;
-            height: 80px;
-            cursor: pointer;
-            transition: transform 0.2s;
-            font-size: 0.85em;
-            vertical-align: top;
-        }
-
-        .plan-cell:hover {
-            transform: scale(1.03);
-            background-color: #bcccdc;
-        }
-
-        .plan-cell.empty {
-            background-color: #f5f5f5;
-            cursor: default;
-        }
-
-        /* Modal / Detail View */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.8);
-            justify-content: center; align-items: center;
-            z-index: 1000;
-        }
-
-        .modal-content {
-            background: white;
-            padding: 40px;
-            border-radius: 15px;
-            max-width: 600px;
-            width: 90%;
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 10px; right: 20px;
-            font-size: 30px; cursor: pointer;
-        }
-
-        @media print {
-            .no-print { display: none; }
-            .modal { position: relative; display: block; background: white; }
-        }
+        /* Modal */
+        .modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; text-align: left; position: relative; }
+        .close { position: absolute; top: 10px; right: 20px; font-size: 25px; cursor: pointer; }
+        
+        @media print { .no-print { display: none; } .modal { display: block; position: relative; } }
     </style>
 </head>
 <body>
 
 <header class="no-print">
-    <h1 id="main-title">APPARATUS TRAINING PLAN</h1>
-    <div id="week-label">(Loading...)</div>
+    <h1>APPARATUS TRAINING PLAN</h1>
+    <div id="current-week-display">Select a Week</div>
 </header>
 
-<div class="week-selector no-print" id="week-btns"></div>
+<div class="week-nav no-print" id="week-btns"></div>
 
-<div class="schedule-container">
+<div class="table-wrapper">
     <table>
         <thead>
-            <tr id="table-head">
-                <th></th> <th>Monday</th>
-                <th>Tuesday</th>
-                <th>Wednesday</th>
-                <th>Thursday</th>
-                <th>Friday</th>
-                <th>Saturday</th>
-                <th>Sunday</th>
+            <tr>
+                <th>Group</th>
+                <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
             </tr>
         </thead>
-        <tbody id="schedule-body">
-            </tbody>
+        <tbody id="schedule-body"></tbody>
     </table>
 </div>
 
 <div id="planModal" class="modal">
     <div class="modal-content">
-        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <span class="close" onclick="closeModal()">&times;</span>
         <div id="modal-body"></div>
-        <br>
-        <button class="no-print" onclick="window.print()" style="padding: 10px; width: 100%; cursor:pointer;">Print / Save PDF</button>
+        <button class="no-print" onclick="window.print()" style="margin-top:20px; width:100%; padding:10px; cursor:pointer; background: #28a745; color:white; border:none; border-radius:5px;">Print / Save PDF</button>
     </div>
 </div>
 
 <script>
-    let trainingData = null;
+    let db = null;
     const groups = ["FIG", "FIG_Rekrutt", "Stiege", "Aspirant"];
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
-    fetch('data.json')
-        .then(res => res.json())
-        .then(data => {
-            trainingData = data;
-            renderWeekButtons();
-            loadWeek(data.trainingswochen[0].id);
-        });
+    fetch('data.json').then(r => r.json()).then(data => {
+        db = data;
+        renderNav();
+        loadWeek(db.trainingswochen[0].id);
+    });
 
-    function renderWeekButtons() {
-        const container = document.getElementById('week-btns');
-        trainingData.trainingswochen.forEach(w => {
-            const btn = document.createElement('button');
-            btn.className = 'week-btn';
-            btn.innerText = w.label;
-            btn.onclick = () => loadWeek(w.id);
-            container.appendChild(btn);
+    function renderNav() {
+        const nav = document.getElementById('week-btns');
+        db.trainingswochen.forEach(w => {
+            const b = document.createElement('button');
+            b.className = 'week-btn';
+            b.innerText = w.label;
+            b.onclick = () => loadWeek(w.id);
+            nav.appendChild(b);
         });
     }
 
-    function loadWeek(weekId) {
-        const week = trainingData.trainingswochen.find(w => w.id === weekId);
-        document.getElementById('week-label').innerText = week.label;
+    function loadWeek(id) {
+        const w = db.trainingswochen.find(x => x.id === id);
+        document.getElementById('current-week-display').innerText = w.label;
         const body = document.getElementById('schedule-body');
         body.innerHTML = '';
 
         groups.forEach(group => {
-            const row = document.createElement('tr');
+            const tr = document.createElement('tr');
+            tr.innerHTML = `<td class="group-header">${group.replace('_',' ')}</td>`;
             
-            // Group Header Column
-            const groupTd = document.createElement('td');
-            groupTd.className = 'group-cell';
-            groupTd.innerText = group.replace('_', ' ');
-            row.appendChild(groupTd);
-
-            // Day Columns
             days.forEach(day => {
-                const cell = document.createElement('td');
-                const dayData = week.tage[day] && week.tage[day][group];
+                const td = document.createElement('td');
+                const dayData = w.tage[day] ? w.tage[day][group] : null;
 
                 if (dayData) {
-                    cell.className = 'plan-cell';
-                    // Show the first 2 apparatus names as preview
-                    const apparatusNames = Object.keys(dayData).join(', ');
-                    cell.innerHTML = `<strong>${day}</strong><br><small>${apparatusNames}</small>`;
-                    cell.onclick = () => showDetail(weekId, day, group);
+                    td.className = 'slot';
+                    let html = '';
+                    for (let timeDevice in dayData) {
+                        html += `<div class="device-link" onclick="openPlan('${id}','${day}','${group}','${timeDevice}')">${timeDevice}</div>`;
+                    }
+                    td.innerHTML = html;
                 } else {
-                    cell.className = 'plan-cell empty';
-                    cell.innerText = 'FRI';
+                    td.className = 'slot free';
+                    td.innerText = 'FRI';
                 }
-                row.appendChild(cell);
+                tr.appendChild(td);
             });
-            body.appendChild(row);
+            body.appendChild(tr);
         });
     }
 
-    function showDetail(weekId, day, groupName) {
-        const week = trainingData.trainingswochen.find(w => w.id === weekId);
-        const data = week.tage[day][groupName];
-        let html = `<h2>${groupName.replace('_',' ')} - ${day}</h2><hr>`;
-        
-        for (let apparatus in data) {
-            html += `<h3>${apparatus.replace('_',' ')}</h3><p>${data[apparatus]}</p>`;
-        }
-        
-        document.getElementById('modal-body').innerHTML = html;
+    function openPlan(wId, day, group, device) {
+        const planText = db.trainingswochen.find(x => x.id === wId).tage[day][group][device];
+        document.getElementById('modal-body').innerHTML = `
+            <small>${group.replace('_',' ')} | ${day}</small>
+            <h2>${device}</h2>
+            <hr>
+            <div style="white-space: pre-wrap; margin-top:15px;">${planText === "..." ? "No detailed plan written yet." : planText}</div>
+        `;
         document.getElementById('planModal').style.display = 'flex';
     }
 
-    function closeModal() {
-        document.getElementById('planModal').style.display = 'none';
-    }
+    function closeModal() { document.getElementById('planModal').style.display = 'none'; }
 </script>
-
 </body>
 </html>
