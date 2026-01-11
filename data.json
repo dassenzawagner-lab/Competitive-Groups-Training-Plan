@@ -27,14 +27,14 @@
         "16:00-16:30 Basic lines": "",
         "16:30-17:15 Bars": "",
         "17:15-18:00 Floor/beam": "",
-        "18:00-18:30 Physio/stretch": "core_plan.html"
+        "18:00-18:30 Strength/condit": "core_plan.html"
       },
       "Saturday": {
         "09:00-10:00 Warm up": "warmup1.html.html",
         "10:00-10:45 Bars": "",
         "10:45-11:30 Beam": "",
         "11:30-12:15 Vault/floor": "",
-        "12:15-13:00 Strength/condit.": "Physio.html"
+        "12:15-13:00 Physio/Stretch": "Physio.html"
       }
     },
     "FIG rekrutt": {
