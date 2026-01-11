@@ -2,7 +2,7 @@
   "Week_3": {
     "FIG": {
       "Monday": {
-        "15:30-16:15 Warm up": "warmup1.html.html",
+        "15:30-16:15 Warm up": "",
         "16:15-17:00 Bars": "",
         "17:00-17:45 Vault": "",
         "17:45-18:30 Beam": "",
@@ -16,14 +16,14 @@
         "18:30-19:30 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Thursday": {
-        "15:30-16:15 Warm up": "warmup1.html.html",
+        "15:30-16:15 Warm up": "",
         "16:15-17:00 Bars": "",
         "17:00-17:45 Vault": "",
         "17:45-18:30 Beam": "",
-        "18:30-19:30 Strength/condit.": "core_plan.html"
+        "18:30-19:30 Strength/condit.": ""
       },
       "Friday": {
-        "15:30-16:00 Warm up": "warmup1.html.html",
+        "15:30-16:00 Warm up": "Dancing (Self-regulated)",
         "16:00-16:30 Basic lines": "",
         "16:30-17:15 Bars": "",
         "17:15-18:00 Floor/beam": "",
@@ -34,56 +34,91 @@
         "10:00-10:45 Bars": "",
         "10:45-11:30 Beam": "",
         "11:30-12:15 Vault/floor": "",
-        "12:15-13:00 Strength/condit.": "core_plan.html"
+        "12:15-13:00 Strength/condit.": ""
       }
     },
     "FIG rekrutt": {
       "Tuesday": {
-        "15:30-16:15 Warm up": "warmup1.html.html",
+        "15:30-16:15 Warm up": "",
         "16:15-17:00 Vault/Floor": "",
         "17:00-17:45 Bars": "",
         "17:45-18:30 Beam": "",
-        "18:30-19:30 Strength/condit.": "Flexibility.Conditioning.html"
+        "18:30-19:30 Strength/condit.": ""
       },
       "Wednesday": {
-        "15:30-16:00 Warm up": "warmup1.html.html",
+        "15:30-16:00 Warm up": "",
+        "16:00-16:45 Beam": "",
+        "16:45-17:30 Floor": "",
         "17:30-18:15 Bars/Straps": "",
         "18:15-18:30 Strength/Stretch": ""
       },
       "Thursday": {
-        "15:30-16:15 Warm up": "warmup1.html.html",
+        "15:30-16:15 Warm up": "",
+        "16:15-17:00 Bars/Straps": "",
+        "17:00-17:45 Vault": "",
+        "17:45-18:30 Beam/Basics": "",
         "18:30-19:30 Strength/condit.": "core_plan.html"
       },
       "Friday": {
-        "15:30-16:00 Warm up": "warmup1.html.html"
+        "15:30-16:00 Warm up": "Dancing (Self-regulated)",
+        "16:00-16:30 Basic lines": "",
+        "16:30-17:15 Bars": "",
+        "17:15-18:00 Floor/Beam": "",
+        "18:00-18:30 Physio/Stretch": ""
       }
     },
     "Stiege": {
       "Monday": {
         "15:30-16:15 Warm up": "warmup1.html.html",
-        "18:30-19:00 Strength/condit.": "core_plan.html"
+        "16:15-17:00 Beam": "",
+        "17:00-17:45 Bars": "",
+        "17:45-18:30 Vault": "",
+        "18:30-19:00 Strength/condit.": "l"
       },
       "Wednesday": {
-        "15:30-16:00 Warm up": "warmup1.html.html",
+        "15:30-16:00 Warm up": "",
+        "16:00-16:45 Floor": "",
+        "16:45-17:30 Bars": "",
+        "17:30-18:15 Beam": "",
         "18:15-19:00 Strength/condit.": ""
       },
       "Thursday": {
-        "15:30-16:15 Warm up": "warmup1.html.html",
+        "15:30-16:15 Warm up": "",
+        "16:15-17:00 Vault": "",
+        "17:00-17:45 Beam": "",
+        "17:45-18:30 Bars": "",
         "18:30-19:00 Strength/condit.": "core_plan.html"
+      },
+      "Friday": {
+        "15:30-16:00 Warm up": "Dancing (Self-regulated)",
+        "16:00-16:30 Basics": "",
+        "16:30-17:15 Beam": "",
+        "17:15-18:00 Bars": "",
+        "18:00-18:45 Floor": "",
+        "18:45-19:00 Stretch": ""
       }
     },
     "Aspirant": {
       "Monday": {
         "15:30-16:15 Warm up": "warmup1.html.html",
-        "18:30-19:00 Strength/condit.": ""
+        "16:15-17:00 Floor/Vault": "",
+        "17:00-17:45 Beam": "",
+        "17:45-18:30 Bars": "",
+        "18:30-19:00 Strength/condit.": "Lasse"
       },
       "Wednesday": {
-        "15:30-16:00 Warm up": "warmup1.html.html",
+        "15:30-16:00 Warm up": "",
+        "16:00-16:45 Bars": "",
+        "16:45-17:30 Beam": "",
+        "17:30-18:15 Vault": "",
         "18:15-19:00 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Thursday": {
-        "15:30-16:15 Warm up": "warmup1.html.html",
-        "18:30-19:00 Strength/condit.": ""
+        "15:30-16:15 Warm up": "",
+        "16:15-17:00 Beam": "",
+        "17:00-17:45 Bars": "",
+        "17:45-18:30 Floor": "",
+        "18:30-19:00 Strength/condit.": "Lasse"
       }
     }
   }
