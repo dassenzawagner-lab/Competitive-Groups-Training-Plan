@@ -3,73 +3,77 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gymnastics Schedule</title>
+    <title>Gymnastics Plan</title>
     <style>
-        :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
-        body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
+        :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; --gray: #64748b; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         header { background: var(--dark); color: white; padding: 15px; text-align: center; }
         
-        .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; }
-        .week-btn { padding: 10px 20px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
+        .week-nav { display: flex; justify-content: center; gap: 8px; padding: 15px; background: white; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
+        .week-btn { padding: 8px 16px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 6px; font-weight: bold; font-size: 0.9em; }
         .week-btn.active { background: var(--dark); color: white; }
 
-        .table-container { padding: 20px; overflow-x: auto; }
-        table { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1200px; }
+        .container { padding: 15px; }
         
-        th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.8em; }
-        .group-name { background: #cbd5e0; font-weight: bold; padding: 15px; border-radius: 5px; width: 120px; text-align: center; }
+        /* DESKTOP ANSICHT */
+        .desktop-table { width: 100%; border-collapse: separate; border-spacing: 5px; display: table; }
+        .desktop-table th { background: #e2e8f0; padding: 10px; border-radius: 4px; font-size: 0.8em; color: var(--dark); }
+        .group-name { background: #cbd5e0; font-weight: bold; padding: 10px; border-radius: 4px; width: 100px; text-align: center; }
+        .day-cell { background: #edf2f7; border-radius: 6px; padding: 8px; vertical-align: top; border: 1px solid #cbd5e1; }
+        
+        /* MOBILE ANSICHT (Standardmäßig versteckt) */
+        .mobile-list { display: none; }
 
-        .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 180px; border: 1px solid #cbd5e1; }
-        .day-cell.free { background: #f8fafc; color: #94a3b8; text-align: center; vertical-align: middle; font-weight: bold; }
-
-        /* Das sind die sichtbaren Geräte-Blöcke */
         .apparatus-block {
-            background: var(--white);
-            margin-bottom: 8px;
-            padding: 8px;
-            border-radius: 5px;
-            border-left: 5px solid var(--accent);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.1s;
+            background: var(--white); margin-bottom: 6px; padding: 8px; border-radius: 5px;
+            border-left: 4px solid var(--accent); box-shadow: 0 1px 3px rgba(0,0,0,0.1); cursor: pointer;
         }
-        .apparatus-block:hover { transform: scale(1.02); background: #f0f9ff; }
-        
-        .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; margin-bottom: 2px; }
-        .name { display: block; font-size: 0.9em; font-weight: 500; }
+        .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.8em; }
+        .name { display: block; font-size: 0.85em; font-weight: 500; }
+
+        /* RESPONSIVE LOGIK */
+        @media (max-width: 900px) {
+            .desktop-table { display: none; }
+            .mobile-list { display: block; }
+            
+            .day-section { background: white; margin-bottom: 20px; border-radius: 10px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+            .day-header { background: var(--dark); color: white; padding: 12px; font-weight: bold; text-align: center; font-size: 1.1em; }
+            .mobile-group-row { padding: 10px; border-bottom: 1px solid #eee; }
+            .mobile-group-title { font-weight: bold; color: var(--gray); font-size: 0.9em; margin-bottom: 8px; display: block; border-bottom: 1px solid #f0f0f0; padding-bottom: 3px;}
+        }
 
         /* Modal */
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; position: relative; }
-        .close { position: absolute; top: 10px; right: 20px; font-size: 24px; cursor: pointer; }
-
-        @media print { .no-print { display: none; } .modal { display: block; position: static; } }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 25px; border-radius: 12px; max-width: 450px; width: 85%; position: relative; }
+        .close { position: absolute; top: 10px; right: 15px; font-size: 28px; cursor: pointer; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 id="title">Competitive Training Plan</h1>
-    <p id="week-label">Week 3</p>
+    <h1 style="margin:0; font-size: 1.4em;">Training Plan</h1>
+    <span id="week-label" style="opacity: 0.8;">Week 3</span>
 </header>
 
-<div class="week-nav no-print">
-    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">Week 3</button>
-    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">Week 4</button>
-    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">Week 5</button>
-    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">Week 6</button>
+<div class="week-nav">
+    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">W3</button>
+    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">W4</button>
+    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">W5</button>
+    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">W6</button>
 </div>
 
-<div class="table-container">
-    <table>
+<div class="container">
+    <table class="desktop-table">
         <thead>
             <tr>
                 <th>Group</th>
-                <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
+                <th>Mon</th><th>Tue</th><th>Wed</th><th>Thu</th><th>Fri</th><th>Sat</th><th>Sun</th>
             </tr>
         </thead>
         <tbody id="schedule-body"></tbody>
     </table>
+
+    <div id="mobile-schedule" class="mobile-list"></div>
 </div>
 
 <div id="planModal" class="modal">
@@ -114,60 +118,38 @@
 
     function render() {
         document.getElementById('week-label').innerText = activeWeek;
+        
+        // Render Desktop
         const body = document.getElementById('schedule-body');
         body.innerHTML = '';
-
         groups.forEach(group => {
             const row = document.createElement('tr');
             row.innerHTML = `<td class="group-name">${group}</td>`;
-            
             days.forEach(day => {
                 const cell = document.createElement('td');
+                cell.className = "day-cell";
                 const units = fullSchedule[group][day];
-                
                 if (units) {
-                    cell.className = "day-cell";
-                    units.forEach(unit => {
-                        const [time, ...rest] = unit.split(' ');
-                        const name = rest.join(' ');
-                        const block = document.createElement('div');
-                        block.className = "apparatus-block";
-                        block.innerHTML = `<span class="time">${time}</span><span class="name">${name}</span>`;
-                        block.onclick = () => openModal(group, day, unit);
-                        cell.appendChild(block);
-                    });
+                    units.forEach(unit => cell.appendChild(createBlock(group, day, unit)));
                 } else {
-                    cell.className = "day-cell free";
-                    cell.innerText = "FRI";
+                    cell.style.opacity = "0.3"; cell.innerText = "-"; cell.style.textAlign = "center";
                 }
                 row.appendChild(cell);
             });
             body.appendChild(row);
         });
-    }
 
-    function setWeek(w) {
-        activeWeek = w;
-        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + w).classList.add('active');
-        render();
-    }
-
-    function openModal(group, day, unit) {
-        let content = "No detailed plan available for this week yet.";
-        if (planContent[activeWeek] && planContent[activeWeek][group] && planContent[activeWeek][group][day]) {
-            content = planContent[activeWeek][group][day][unit] || content;
-        }
-        document.getElementById('modal-text').innerHTML = `<h2>${unit}</h2><p><strong>${group} - ${day}</strong></p><hr><p>${content}</p>`;
-        document.getElementById('planModal').style.display = 'flex';
-    }
-
-    function closeModal() { document.getElementById('planModal').style.display = 'none'; }
-
-    fetch('data.json').then(r => r.json()).then(data => {
-        planContent = data;
-        render();
-    }).catch(() => render());
-</script>
-</body>
-</html>
+        // Render Mobile
+        const mobileContainer = document.getElementById('mobile-schedule');
+        mobileContainer.innerHTML = '';
+        days.forEach(day => {
+            let dayHasTraining = false;
+            const daySection = document.createElement('div');
+            daySection.className = 'day-section';
+            daySection.innerHTML = `<div class="day-header">${day}</div>`;
+            
+            groups.forEach(group => {
+                const units = fullSchedule[group][day];
+                if (units) {
+                    dayHasTraining = true;
+                    const groupRow = document.createElement('div
