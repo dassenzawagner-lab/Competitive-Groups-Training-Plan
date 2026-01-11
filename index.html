@@ -3,23 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gymnastics Training 2026</title>
+    <title>Gymnastics Planning 2026</title>
     <style>
-        :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
+        :root { 
+            --dark: #1a2b3c; 
+            --bg: #f4f7f9; 
+            --accent: #0056b3; 
+            --white: #ffffff; 
+        }
+        
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         header { background: var(--dark); color: white; padding: 20px; text-align: center; }
         
+        /* Navigation */
         .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
         .week-btn { padding: 10px 15px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
         .week-btn.active { background: var(--dark); color: white; }
 
+        /* Tabelle */
         .table-container { padding: 20px; overflow-x: auto; }
-        table { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1100px; }
+        table.main-schedule { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1100px; }
         th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.85em; }
         .group-name { background: #cbd5e0; font-weight: bold; padding: 15px; border-radius: 5px; width: 120px; text-align: center; }
 
         .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 150px; border: 1px solid #cbd5e1; }
         
+        /* Trainings-Blöcke */
         .apparatus-block {
             background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px;
             border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;
@@ -27,34 +36,41 @@
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
 
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 550px; width: 90%; position: relative; max-height: 85vh; overflow-y: auto; }
-        .close { position: absolute; top: 10px; right: 20px; font-size: 24px; cursor: pointer; color: #666; }
-        
-        /* Bild-Styling im Modal */
-        .modal-img { width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #ddd; }
+        /* MODAL (Das Fenster für deine Tabellen) */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { 
+            background: white; padding: 25px; border-radius: 12px; 
+            max-width: 95%; width: 800px; max-height: 90vh; overflow-y: auto; position: relative; 
+        }
+        .close { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; color: #333; }
+
+        /* Styling für die Tabelle INNERHALB des Fensters */
+        .plan-table { width: 100%; border-collapse: collapse; margin-top: 15px; font-size: 0.9em; }
+        .plan-table th, .plan-table td { border: 1px solid #ccc; padding: 8px; text-align: left; }
+        .plan-table th { background-color: #f2f2f2; font-weight: bold; }
+        .modal-img { width: 100%; max-width: 400px; border-radius: 8px; margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 style="margin:0;">Turn-Trainingsplan 2026</h1>
-    <p id="week-label" style="margin:5px 0 0 0;">Woche lädt...</p>
+    <h1 style="margin:0;">Wettkampf-Trainingsplan 2026</h1>
+    <p id="week-label" style="margin:5px 0 0 0;">Lade Plan...</p>
 </header>
 
 <div class="week-nav">
     <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3 (12.01.-18.01.)</button>
     <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4 (19.01.-25.01.)</button>
     <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5 (26.01.-01.02.)</button>
-    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6 (02.02.-08.02.)</button>
+    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6 (02.02.-15.02.)</button>
 </div>
 
 <div class="table-container">
-    <table>
+    <table class="main-schedule">
         <thead>
             <tr>
                 <th>Gruppe</th>
-                <th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th>
+                <th>Montag</th><th>Dienstag</th><th>Mittwoch</th><th>Donnerstag</th><th>Freitag</th><th>Samstag</th><th>Sonntag</th>
             </tr>
         </thead>
         <tbody id="schedule-body"></tbody>
@@ -142,15 +158,15 @@
     }
 
     function openModal(group, day, unit) {
-        let content = "<i>Noch keine Übungen eingetragen.</i>";
-        if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
-            content = planContent[activeWeek][group][day][unit];
+        let content = "<i>Noch keine Details für dieses Training eingetragen.</i>";
+        if (planContent[activeWeek] && planContent[activeWeek][group] && planContent[activeWeek][group][day]) {
+            content = planContent[activeWeek][group][day][unit] || content;
         }
         
+        // WICHTIG: innerHTML erlaubt die Darstellung deiner Tabelle aus data.json
         document.getElementById('modal-text').innerHTML = `
-            <h2 style="margin-top:0; color:var(--accent);">${unit}</h2>
-            <p><b>Gruppe:</b> ${group} | <b>Tag:</b> ${day}</p>
-            <hr style="border:0; border-top:1px solid #eee;">
+            <h2 style="margin-top:0; color:var(--accent); border-bottom: 2px solid #eee; padding-bottom:10px;">${unit}</h2>
+            <p style="margin: 10px 0;"><b>Gruppe:</b> ${group} | <b>Tag:</b> ${day}</p>
             <div style="margin-top:15px;">${content}</div>
         `;
         document.getElementById('planModal').style.display = 'flex';
@@ -158,10 +174,14 @@
 
     function closeModal() { document.getElementById('planModal').style.display = 'none'; }
 
+    // Daten laden
     fetch('data.json').then(r => r.json()).then(data => {
         planContent = data;
         render();
-    }).catch(() => render());
+    }).catch(() => {
+        console.log("data.json konnte nicht geladen werden.");
+        render();
+    });
 </script>
 </body>
 </html>
