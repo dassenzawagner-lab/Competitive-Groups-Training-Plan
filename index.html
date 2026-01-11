@@ -3,35 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gymnastics Schedule 2026</title>
+    <title>Gymnastics Training 2026</title>
     <style>
-        /* --- DESIGN-EINSTELLUNGEN --- */
-        :root { 
-            --dark: #1a2b3c;    /* Farbe für Header und aktive Buttons */
-            --bg: #f4f7f9;      /* Hintergrundfarbe der Seite */
-            --accent: #0056b3;  /* Farbe der Zeitangaben */
-            --white: #ffffff; 
-        }
-        
+        :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         header { background: var(--dark); color: white; padding: 20px; text-align: center; }
         
-        /* NAVIGATION: Die Wochen-Auswahl oben */
         .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
-        .week-btn { padding: 10px 15px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; transition: 0.2s; }
-        .week-btn:hover { background: #eee; }
+        .week-btn { padding: 10px 15px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
         .week-btn.active { background: var(--dark); color: white; }
 
-        /* TABELLEN-STYLING */
         .table-container { padding: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1100px; }
         th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.85em; }
         .group-name { background: #cbd5e0; font-weight: bold; padding: 15px; border-radius: 5px; width: 120px; text-align: center; }
 
-        /* DIE TAGES-SPALTEN */
         .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 150px; border: 1px solid #cbd5e1; }
         
-        /* TRAINING-BLÖCKE */
         .apparatus-block {
             background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px;
             border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;
@@ -39,24 +27,26 @@
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
 
-        /* DETAILS-FENSTER (Modal) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 500px; width: 90%; position: relative; box-shadow: 0 5px 15px rgba(0,0,0,0.3); }
+        .modal-content { background: white; padding: 30px; border-radius: 10px; max-width: 550px; width: 90%; position: relative; max-height: 85vh; overflow-y: auto; }
         .close { position: absolute; top: 10px; right: 20px; font-size: 24px; cursor: pointer; color: #666; }
+        
+        /* Bild-Styling im Modal */
+        .modal-img { width: 100%; border-radius: 8px; margin-top: 10px; border: 1px solid #ddd; }
     </style>
 </head>
 <body>
 
 <header>
-    <h1 style="margin:0;">Trainingsplanung 2026</h1>
-    <p id="week-label" style="margin:5px 0 0 0; opacity: 0.9;">Woche lädt...</p>
+    <h1 style="margin:0;">Turn-Trainingsplan 2026</h1>
+    <p id="week-label" style="margin:5px 0 0 0;">Woche lädt...</p>
 </header>
 
 <div class="week-nav">
-    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3 (12.01. - 18.01.)</button>
-    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4 (19.01. - 25.01.)</button>
-    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5 (26.01. - 01.02.)</button>
-    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6 (02.02. - 08.02.)</button>
+    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3 (12.01.-18.01.)</button>
+    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4 (19.01.-25.01.)</button>
+    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5 (26.01.-01.02.)</button>
+    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6 (02.02.-08.02.)</button>
 </div>
 
 <div class="table-container">
@@ -79,13 +69,6 @@
 </div>
 
 <script>
-    /* DATEN-ÜBERSICHT FÜR DEINE PLANUNG (2026):
-       KW 3: 12.01. (Mo) bis 18.01. (So)
-       KW 4: 19.01. (Mo) bis 25.01. (So)
-       KW 5: 26.01. (Mo) bis 01.02. (So)
-       KW 6: 02.02. (Mo) bis 08.02. (So)
-    */
-
     const fullSchedule = {
         "FIG": {
             "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
@@ -121,18 +104,15 @@
     function render() {
         const btn = document.getElementById('btn-' + activeWeek);
         document.getElementById('week-label').innerText = btn.innerText;
-
         const body = document.getElementById('schedule-body');
         body.innerHTML = ''; 
 
         groups.forEach(group => {
             const row = document.createElement('tr');
             row.innerHTML = `<td class="group-name">${group}</td>`;
-            
             days.forEach(day => {
                 const cell = document.createElement('td');
                 const units = fullSchedule[group][day];
-                
                 if (units) {
                     cell.className = "day-cell";
                     units.forEach(unit => {
@@ -146,9 +126,7 @@
                     });
                 } else {
                     cell.className = "day-cell";
-                    cell.style.background = "#f9f9f9";
-                    cell.style.textAlign = "center";
-                    cell.innerHTML = "<span style='color:#ccc; font-size: 0.8em;'>-</span>"; 
+                    cell.innerHTML = "<span style='color:#ccc;'>-</span>"; 
                 }
                 row.appendChild(cell);
             });
@@ -164,33 +142,26 @@
     }
 
     function openModal(group, day, unit) {
-        let content = "<i>Noch keine Übungen für dieses Gerät eingetragen.</i>";
+        let content = "<i>Noch keine Übungen eingetragen.</i>";
         if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
             content = planContent[activeWeek][group][day][unit];
         }
         
         document.getElementById('modal-text').innerHTML = `
             <h2 style="margin-top:0; color:var(--accent);">${unit}</h2>
-            <p style="margin-bottom:10px;"><b>Gruppe:</b> ${group} | <b>Tag:</b> ${day}</p>
+            <p><b>Gruppe:</b> ${group} | <b>Tag:</b> ${day}</p>
             <hr style="border:0; border-top:1px solid #eee;">
-            <div style="white-space: pre-wrap; line-height:1.6; margin-top:15px;">${content}</div>
+            <div style="margin-top:15px;">${content}</div>
         `;
         document.getElementById('planModal').style.display = 'flex';
     }
 
     function closeModal() { document.getElementById('planModal').style.display = 'none'; }
 
-    // Laden der data.json
-    fetch('data.json')
-        .then(r => r.json())
-        .then(data => {
-            planContent = data;
-            render();
-        })
-        .catch(() => {
-            console.log("Hinweis: data.json nicht gefunden.");
-            render();
-        });
+    fetch('data.json').then(r => r.json()).then(data => {
+        planContent = data;
+        render();
+    }).catch(() => render());
 </script>
 </body>
 </html>
