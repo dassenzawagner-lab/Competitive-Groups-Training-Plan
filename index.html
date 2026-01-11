@@ -1,46 +1,74 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gymnastics Planning 2026</title>
+    <title>Gymnastics Schedule</title>
     <style>
         :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
-        header { background: var(--dark); color: white; padding: 20px; text-align: center; }
-        .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
-        .week-btn { padding: 10px 15px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
+        header { background: var(--dark); color: white; padding: 15px; text-align: center; }
+        
+        .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; }
+        .week-btn { padding: 10px 20px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
         .week-btn.active { background: var(--dark); color: white; }
+
         .table-container { padding: 20px; overflow-x: auto; }
-        table.main-schedule { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1100px; }
-        th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.85em; }
+        table { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1200px; }
+        
+        th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.8em; }
         .group-name { background: #cbd5e0; font-weight: bold; padding: 15px; border-radius: 5px; width: 120px; text-align: center; }
-        .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 150px; border: 1px solid #cbd5e1; }
-        .apparatus-block { background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px; border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; }
-        .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; }
+
+        .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 180px; border: 1px solid #cbd5e1; }
+        .day-cell.free { background: #f8fafc; color: #94a3b8; text-align: center; vertical-align: middle; font-weight: bold; }
+
+        .apparatus-block {
+            background: var(--white);
+            margin-bottom: 8px;
+            padding: 8px;
+            border-radius: 5px;
+            border-left: 5px solid var(--accent);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer;
+            transition: transform 0.1s;
+        }
+        .apparatus-block:hover { transform: scale(1.02); background: #f0f9ff; }
+        
+        .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; margin-bottom: 2px; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
-        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { background: white; padding: 20px; border-radius: 12px; width: 95%; max-width: 1000px; height: 90vh; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-        .close { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #333; z-index: 10; }
-        #modal-body { flex-grow: 1; width: 100%; overflow-y: auto; margin-top: 40px; }
+
+        /* Modal Anpassung für HTML-Dokumente */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
+        .modal-content { background: white; padding: 20px; border-radius: 10px; width: 95%; max-width: 900px; height: 90vh; position: relative; display: flex; flex-direction: column; }
+        .close { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; z-index: 10; }
+        #modal-body { flex-grow: 1; width: 100%; overflow: hidden; }
         iframe { width: 100%; height: 100%; border: none; }
+
+        @media print { .no-print { display: none; } .modal { display: block; position: static; } }
     </style>
 </head>
 <body>
 
-<header><h1>Gymnastics Training System 2026</h1></header>
+<header>
+    <h1 id="title">Competitive Training Plan</h1>
+    <p id="week-label">Week 3</p>
+</header>
 
-<div class="week-nav">
-    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3 (12.01.-18.01.)</button>
-    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4 (19.01.-25.01.)</button>
-    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5 (26.01.-01.02.)</button>
-    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6 (02.02.-08.02.)</button>
+<div class="week-nav no-print">
+    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">Week 3</button>
+    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">Week 4</button>
+    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">Week 5</button>
+    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">Week 6</button>
 </div>
 
 <div class="table-container">
-    <table class="main-schedule">
-        <thead id="schedule-head">
-            </thead>
+    <table>
+        <thead>
+            <tr>
+                <th>Group</th>
+                <th>Monday</th><th>Tuesday</th><th>Wednesday</th><th>Thursday</th><th>Friday</th><th>Saturday</th><th>Sunday</th>
+            </tr>
+        </thead>
         <tbody id="schedule-body"></tbody>
     </table>
 </div>
@@ -80,79 +108,75 @@
         }
     };
 
-    const weekDates = {
-        "Week_3": ["Mo 12.01.", "Di 13.01.", "Mi 14.01.", "Do 15.01.", "Fr 16.01.", "Sa 17.01.", "So 18.01."],
-        "Week_4": ["Mo 19.01.", "Di 20.01.", "Mi 21.01.", "Do 22.01.", "Fr 23.01.", "Sa 24.01.", "So 25.01."],
-        "Week_5": ["Mo 26.01.", "Di 27.01.", "Mi 28.01.", "Do 29.01.", "Fr 30.01.", "Sa 31.01.", "So 01.02."],
-        "Week_6": ["Mo 02.02.", "Di 03.02.", "Mi 04.02.", "Do 05.02.", "Fr 06.02.", "Sa 07.02.", "So 08.02."]
-    };
-
-    let activeWeek = "Week_3"; 
-    let planContent = {};      
+    let activeWeek = "Week_3";
+    let planContent = {};
     const groups = ["FIG", "FIG rekrutt", "Stiege", "Aspirant"];
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     function render() {
-        // Kopfzeile mit Daten rendern
-        const head = document.getElementById('schedule-head');
-        let headHTML = `<tr><th>Gruppe</th>`;
-        weekDates[activeWeek].forEach(date => {
-            headHTML += `<th>${date}</th>`;
-        });
-        headHTML += `</tr>`;
-        head.innerHTML = headHTML;
-
-        // Body rendern
+        document.getElementById('week-label').innerText = activeWeek;
         const body = document.getElementById('schedule-body');
-        body.innerHTML = ''; 
+        body.innerHTML = '';
+
         groups.forEach(group => {
             const row = document.createElement('tr');
             row.innerHTML = `<td class="group-name">${group}</td>`;
+            
             days.forEach(day => {
                 const cell = document.createElement('td');
-                const units = fullSchedule[group] ? fullSchedule[group][day] : null;
+                const units = fullSchedule[group][day];
+                
                 if (units) {
                     cell.className = "day-cell";
                     units.forEach(unit => {
+                        const [time, ...rest] = unit.split(' ');
+                        const name = rest.join(' ');
                         const block = document.createElement('div');
                         block.className = "apparatus-block";
-                        block.innerHTML = `<span class="time">${unit.split(' ')[0]}</span><span class="name">${unit.split(' ').slice(1).join(' ')}</span>`;
+                        block.innerHTML = `<span class="time">${time}</span><span class="name">${name}</span>`;
                         block.onclick = () => openModal(group, day, unit);
                         cell.appendChild(block);
                     });
-                } else { cell.className = "day-cell"; cell.innerHTML = "-"; }
+                } else {
+                    cell.className = "day-cell free";
+                    cell.innerText = "FRI";
+                }
                 row.appendChild(cell);
             });
             body.appendChild(row);
         });
     }
 
+    function setWeek(w) {
+        activeWeek = w;
+        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + w).classList.add('active');
+        render();
+    }
+
     function openModal(group, day, unit) {
-        let content = "";
+        let content = "No detailed plan available.";
         if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
             content = planContent[activeWeek][group][day][unit];
         }
+
         const modalBody = document.getElementById('modal-body');
-        if (content && content.endsWith(".html")) {
+        if (content.endsWith(".html")) {
             modalBody.innerHTML = `<iframe src="${content}"></iframe>`;
         } else {
-            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2>${content || "Kein Plan hinterlegt."}</div>`;
+            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2><p>${content}</p></div>`;
         }
         document.getElementById('planModal').style.display = 'flex';
     }
 
-    function closeModal() { document.getElementById('planModal').style.display = 'none'; }
-    
-    function setWeek(w) { 
-        activeWeek = w; 
-        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + w).classList.add('active');
-        render(); 
+    function closeModal() { 
+        document.getElementById('planModal').style.display = 'none';
+        document.getElementById('modal-body').innerHTML = ''; // Cache leeren
     }
 
-    fetch('data.json').then(r => r.json()).then(data => { 
-        planContent = data; 
-        render(); 
+    fetch('data.json').then(r => r.json()).then(data => {
+        planContent = data;
+        render();
     }).catch(() => render());
 </script>
 </body>
