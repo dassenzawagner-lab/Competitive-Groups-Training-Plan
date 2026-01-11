@@ -3,31 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Wettkampf-Trainingsplan 2026</title>
+    <title>Trainingssystem 2026</title>
     <style>
-        :root { 
-            --dark: #1a2b3c; 
-            --bg: #f4f7f9; 
-            --accent: #0056b3; 
-            --white: #ffffff; 
-        }
-        
+        :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         header { background: var(--dark); color: white; padding: 20px; text-align: center; }
         
-        /* Navigation der Wochen */
         .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
         .week-btn { padding: 10px 15px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
         .week-btn.active { background: var(--dark); color: white; }
 
-        /* Haupt-Stundenplan Tabelle */
         .table-container { padding: 20px; overflow-x: auto; }
         table.main-schedule { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1100px; }
         th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.85em; }
         .group-name { background: #cbd5e0; font-weight: bold; padding: 15px; border-radius: 5px; width: 120px; text-align: center; }
         .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 150px; border: 1px solid #cbd5e1; }
         
-        /* Die klickbaren Trainings-Blöcke */
         .apparatus-block {
             background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px;
             border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;
@@ -35,7 +26,6 @@
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
 
-        /* Das Detail-Fenster (Modal) */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
         .modal-content { 
             background: white; padding: 20px; border-radius: 12px; 
@@ -44,32 +34,21 @@
         }
         .close { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #333; z-index: 10; }
         #modal-body { flex-grow: 1; width: 100%; overflow-y: auto; margin-top: 40px; }
-
-        /* Styling für Dokument-Anzeige */
         iframe { width: 100%; height: 100%; border: none; }
     </style>
 </head>
 <body>
 
-<header>
-    <h1 style="margin:0;">Gymnastics Training System</h1>
-    <p id="week-label" style="margin:5px 0 0 0;">Woche auswählen...</p>
-</header>
+<header><h1>Gymnastics Training System</h1></header>
 
 <div class="week-nav">
-    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">W3 (12.01.-18.01.)</button>
-    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">W4 (19.01.-25.01.)</button>
-    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">W5 (26.01.-01.02.)</button>
-    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">W6 (02.02.-08.02.)</button>
+    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">Woche 3 (12.01.-18.01.)</button>
 </div>
 
 <div class="table-container">
     <table class="main-schedule">
         <thead>
-            <tr>
-                <th>Gruppe</th>
-                <th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th>
-            </tr>
+            <tr><th>Gruppe</th><th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th></tr>
         </thead>
         <tbody id="schedule-body"></tbody>
     </table>
@@ -77,4 +56,69 @@
 
 <div id="planModal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
-        <span class="
+        <span class="close" onclick="closeModal()">&times;</span>
+        <div id="modal-body"></div>
+    </div>
+</div>
+
+<script>
+    // Hier ist der Stundenplan genau nach deinen Wünschen:
+    const fullSchedule = {
+        "FIG": { "Tuesday": ["15:30-16:15 Warm up"] },
+        "FIG rekrutt": { "Tuesday": ["15:30-16:15 Warm up"] },
+        "Stiege": { "Monday": ["15:30-16:15 Warm up"] },
+        "Aspirant": { "Monday": ["15:30-16:15 Warm up"] }
+    };
+
+    let activeWeek = "Week_3"; 
+    let planContent = {};      
+    const groups = ["FIG", "FIG rekrutt", "Stiege", "Aspirant"];
+    const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+
+    function render() {
+        const body = document.getElementById('schedule-body');
+        body.innerHTML = ''; 
+        groups.forEach(group => {
+            const row = document.createElement('tr');
+            row.innerHTML = `<td class="group-name">${group}</td>`;
+            days.forEach(day => {
+                const cell = document.createElement('td');
+                const units = fullSchedule[group] ? fullSchedule[group][day] : null;
+                if (units) {
+                    cell.className = "day-cell";
+                    units.forEach(unit => {
+                        const block = document.createElement('div');
+                        block.className = "apparatus-block";
+                        block.innerHTML = `<span class="time">${unit.split(' ')[0]}</span><span class="name">${unit.split(' ').slice(1).join(' ')}</span>`;
+                        block.onclick = () => openModal(group, day, unit);
+                        cell.appendChild(block);
+                    });
+                } else { cell.className = "day-cell"; cell.innerHTML = "-"; }
+                row.appendChild(cell);
+            });
+            body.appendChild(row);
+        });
+    }
+
+    function openModal(group, day, unit) {
+        let content = "";
+        if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
+            content = planContent[activeWeek][group][day][unit];
+        }
+        const modalBody = document.getElementById('modal-body');
+        // Lädt bei jeder Gruppe die HTML-Datei direkt
+        if (content.endsWith(".html")) {
+            modalBody.innerHTML = `<iframe src="${content}"></iframe>`;
+        } else {
+            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2>${content}</div>`;
+        }
+        document.getElementById('planModal').style.display = 'flex';
+    }
+
+    function closeModal() { document.getElementById('planModal').style.display = 'none'; }
+    function setWeek(w) { activeWeek = w; render(); }
+
+    fetch('data.json').then(r => r.json()).then(data => { planContent = data; render(); }).catch(() => render());
+</script>
+</body>
+</html>
