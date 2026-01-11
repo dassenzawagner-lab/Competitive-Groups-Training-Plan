@@ -1,17 +1,27 @@
 {
-  "trainingswochen": [
-    {
-      "id": "Week 5",
-      "label": "Week 5 (Basic Training)",
-      "tage": {
-        "Monday": {
-          "Elite_Group": {
-            "Warm_Up": "15 min Running\nDynamic Stretching",
-            "Vault": "Handstand entries on vaulting table",
-            "High_Bar": "Giants preparation"
-          }
-        }
+  "Week_3": {
+    "FIG": {
+      "Tuesday": {
+        "15:30-16:15 Warm up": "<b>Warm up 1</b><br><img src='warmup_path.jpg' class='modal-img'><br><br><b>1. Sliders - Push-up position:</b><br>• Way 1: Walking forward (Feet on Slider)<br>• Way 1: Both legs forward<br>• Way 2: Walking backward (Feet on Slider)<br>• Way 2: Both legs backward<br>• Way 3: One foot switch (Walking forward)<br>• Way 3: Both legs sideways<br><br><b>2. Sliders - Hands & Movement:</b><br>• Way 1: Hands walking forward<br>• Way 2: Hands walking backward<br>• Way 3: Hands jumping forward<br>• Way 1: Caterpillar forward<br>• Way 2: Caterpillar backward<br><br><b>3. Sliders - Reverse Plank:</b><br>• Way 1: Forward movement<br>• Way 2: Backwards movement<br>• Way 3: One foot switch forward<br><br><b>4. Rope:</b><br>• 20x attempts double jumps<br>• 20x attempts criss cross jumps<br><br><b>5. Stretching:</b><br>• Shoulder/hip movement on floor<br>• Stretching in circle<br>• Sitting in each split for 1 minute"
+      }
+    },
+    "FIG rekrutt": {
+      "Tuesday": {
+        "15:30-16:15 Warm up": "<b>Warm up 1</b><br><img src='warmup_path.jpg' class='modal-img'><br><br>(Siehe FIG Plan: Sliders, Rope & Stretching)"
+      }
+    },
+    "Aspirant": {
+      "Wednesday": {
+        "15:30-16:00 Warm up": "<b>Warm up 1</b><br><img src='warmup_path.jpg' class='modal-img'><br><br>Fokus heute: Body Activation & Sliders Way 1-3."
+      }
+    },
+    "Stiege": {
+      "Monday": {
+        "15:30-16:15 Warm up": "Standard Warm up - Fokus Beweglichkeit."
+      },
+      "Friday": {
+        "15:30-16:00 Warm up": "<b>Warm up 1</b><br><img src='warmup_path.jpg' class='modal-img'><br><br>Vollständiges Slider- und Seilprogramm."
       }
     }
-  ]
+  }
 }
