@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Trainingssystem 2026</title>
+    <title>Gymnastics Planning 2026</title>
     <style>
         :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
@@ -39,10 +39,13 @@
 </head>
 <body>
 
-<header><h1>Gymnastics Training System</h1></header>
+<header><h1>Gymnastics Training System 2026</h1></header>
 
 <div class="week-nav">
-    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">Woche 3 (12.01.-18.01.)</button>
+    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3</button>
+    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4</button>
+    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5</button>
+    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6</button>
 </div>
 
 <div class="table-container">
@@ -62,7 +65,6 @@
 </div>
 
 <script>
-    // Hier ist der Stundenplan genau nach deinen Wünschen:
     const fullSchedule = {
         "FIG": { "Tuesday": ["15:30-16:15 Warm up"] },
         "FIG rekrutt": { "Tuesday": ["15:30-16:15 Warm up"] },
@@ -102,11 +104,11 @@
 
     function openModal(group, day, unit) {
         let content = "";
+        // Überprüft Woche, Gruppe, Tag und Einheit
         if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
             content = planContent[activeWeek][group][day][unit];
         }
         const modalBody = document.getElementById('modal-body');
-        // Lädt bei jeder Gruppe die HTML-Datei direkt
         if (content.endsWith(".html")) {
             modalBody.innerHTML = `<iframe src="${content}"></iframe>`;
         } else {
@@ -116,7 +118,12 @@
     }
 
     function closeModal() { document.getElementById('planModal').style.display = 'none'; }
-    function setWeek(w) { activeWeek = w; render(); }
+    function setWeek(w) { 
+        activeWeek = w; 
+        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById('btn-' + w).classList.add('active');
+        render(); 
+    }
 
     fetch('data.json').then(r => r.json()).then(data => { planContent = data; render(); }).catch(() => render());
 </script>
