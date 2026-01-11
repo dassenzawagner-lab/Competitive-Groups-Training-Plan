@@ -9,13 +9,11 @@
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         header { background: var(--dark); color: white; padding: 15px; text-align: center; position: relative; }
         
-        /* Download/Print Button */
         .download-btn {
             position: absolute; right: 20px; top: 50%; transform: translateY(-50%);
             background: #27ae60; color: white; border: none; padding: 10px 15px;
             border-radius: 5px; cursor: pointer; font-weight: bold;
         }
-        .download-btn:hover { background: #219150; }
 
         .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; }
         .week-btn { padding: 10px 20px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
@@ -32,31 +30,32 @@
         .day-cell.free { background: #f8fafc; color: #94a3b8; text-align: center; vertical-align: middle; font-weight: bold; }
 
         .apparatus-block {
-            background: var(--white);
-            margin-bottom: 8px;
-            padding: 8px;
-            border-radius: 5px;
-            border-left: 5px solid var(--accent);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-            cursor: pointer;
-            transition: transform 0.1s;
+            background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px;
+            border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            cursor: pointer; transition: transform 0.1s;
         }
         .apparatus-block:hover { transform: scale(1.02); background: #f0f9ff; }
-        
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; margin-bottom: 2px; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
 
+        /* Modal Styling */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 10px; width: 95%; max-width: 900px; height: 90vh; position: relative; display: flex; flex-direction: column; }
         .close { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; z-index: 10; }
-        #modal-body { flex-grow: 1; width: 100%; overflow: hidden; }
+        
+        /* Button zum Drucken des Modal-Inhalts */
+        .modal-print-btn { background: #0056b3; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; align-self: flex-start; font-weight: bold; }
+
+        #modal-body { flex-grow: 1; width: 100%; overflow-y: auto; }
         iframe { width: 100%; height: 100%; border: none; }
 
+        /* DRUCK-EINSTELLUNGEN */
         @media print { 
-            .no-print, .week-nav, .download-btn { display: none !important; } 
-            .modal { display: block; position: static; }
-            body { background: white; }
-            .table-container { padding: 0; }
+            /* Wenn wir drucken, verstecken wir ALLES außer dem Modal-Inhalt */
+            body * { visibility: hidden; }
+            #modal-body, #modal-body * { visibility: visible; }
+            #modal-body { position: absolute; left: 0; top: 0; width: 100%; }
+            .close, .modal-print-btn, .week-nav, header { display: none !important; }
         }
     </style>
 </head>
@@ -65,7 +64,7 @@
 <header>
     <h1 id="title">Competitive Training Plan</h1>
     <p id="week-label">Week 3</p>
-    <button class="download-btn no-print" onclick="window.print()">Download / Print</button>
+    <button class="download-btn no-print" onclick="window.print()">Print Full Overview</button>
 </header>
 
 <div class="week-nav no-print">
@@ -78,7 +77,7 @@
 <div class="table-container">
     <table>
         <thead>
-            <tr id="header-row">
+            <tr>
                 <th>Group</th>
                 <th>Monday<span id="date-0"></span></th>
                 <th>Tuesday<span id="date-1"></span></th>
@@ -96,6 +95,7 @@
 <div id="planModal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close" onclick="closeModal()">&times;</span>
+        <button class="modal-print-btn no-print" onclick="printModal()">Download / Print Detail</button>
         <div id="modal-body"></div>
     </div>
 </div>
@@ -135,7 +135,6 @@
 
     function updateDates(weekStr) {
         const weekNum = parseInt(weekStr.split('_')[1]);
-        // Monday of Week 1, 2026 is Dec 29, 2025. Monday of Week 3 is Jan 12, 2026.
         const monday = new Date(2026, 0, 12 + (weekNum - 3) * 7);
         for (let i = 0; i < 7; i++) {
             const d = new Date(monday);
@@ -149,15 +148,12 @@
         updateDates(activeWeek);
         const body = document.getElementById('schedule-body');
         body.innerHTML = '';
-
         groups.forEach(group => {
             const row = document.createElement('tr');
             row.innerHTML = `<td class="group-name">${group}</td>`;
-            
             days.forEach(day => {
                 const cell = document.createElement('td');
                 const units = fullSchedule[group][day];
-                
                 if (units) {
                     cell.className = "day-cell";
                     units.forEach(unit => {
@@ -191,14 +187,25 @@
         if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
             content = planContent[activeWeek][group][day][unit];
         }
-
         const modalBody = document.getElementById('modal-body');
         if (content.endsWith(".html")) {
-            modalBody.innerHTML = `<iframe src="${content}"></iframe>`;
+            modalBody.innerHTML = `<iframe id="print-iframe" src="${content}"></iframe>`;
         } else {
-            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2><p>${content}</p></div>`;
+            modalBody.innerHTML = `<div id="print-content" style="padding:20px;"><h2>${unit}</h2><p>${content}</p></div>`;
         }
         document.getElementById('planModal').style.display = 'flex';
+    }
+
+    function printModal() {
+        const iframe = document.getElementById('print-iframe');
+        if (iframe) {
+            // Wenn der Inhalt ein HTML Dokument (Iframe) ist
+            iframe.contentWindow.focus();
+            iframe.contentWindow.print();
+        } else {
+            // Wenn der Inhalt nur Text ist
+            window.print();
+        }
     }
 
     function closeModal() { 
