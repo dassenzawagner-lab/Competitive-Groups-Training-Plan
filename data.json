@@ -1,9 +1,26 @@
 {
   "Week_3": {
-    "FIG": {
-      "Tuesday": {
-        [cite_start]"15:30-16:15 Warm up": "<table border='1' style='width:100%; border-collapse: collapse; font-size: 12px;'><thead><tr style='background:#f2f2f2;'><th>Sliders:</th><th>Way:</th><th>Rope:</th><th>Way</th><th>Core tumbeling partner</th><th>Amount</th></tr></thead><tbody><tr><td>Feet on Slider: Walking forward Push-up</td><td>1</td><td>Both legs forward</td><td>1</td><td>Upper Body lifts front</td><td>10</td></tr><tr><td>Feet on Slider: Walking backward Push-up</td><td>2</td><td>Both legs backward</td><td>2</td><td>Upper Body lifts front twists</td><td>10</td></tr><tr><td>One foot on Slider (switch): Walking forward</td><td>3</td><td>Both legs sideways / switch</td><td>3</td><td>Upper Body hold</td><td>20s</td></tr><tr><td>Hands on Slider: 'Walking' forward</td><td>1</td><td>Right leg forward</td><td>1</td><td>Upper Body lifts back</td><td>10</td></tr><tr><td>Hands on Slider: 'Walking' backwards</td><td>2</td><td>Right leg backward</td><td>2</td><td>Upper Body lifts backtwists</td><td>10</td></tr><tr><td>Hands on Slider: Jumping forward</td><td>3</td><td>Right leg sideways</td><td>3</td><td>Upper Body back hold</td><td>20s</td></tr><tr><td>Feet on Slider: 'Caterpillar' forward</td><td>1</td><td>Left leg forward</td><td>1</td><td>Upper Body lifts side</td><td>10</td></tr><tr><td>Feet on Slider: 'Caterpillar' backward</td><td>2</td><td>Left leg backward</td><td>2</td><td>Upper Body lifts side picking apples</td><td>10</td></tr><tr><td>Feet on Slider: Jumping forward</td><td>3</td><td>Left leg sideways</td><td>3</td><td>Upper Body side hold</td><td>20s</td></tr><tr><td>Feet on Slider: Reverse Plank Forward</td><td>1</td><td>Both legs forward</td><td>1</td><td>Upper Body lifts side</td><td>10</td></tr><tr><td>Feet on Slider: Reverse Plank backwards</td><td>2</td><td>Both legs backward</td><td>2</td><td>Upper Body side picking apples</td><td>10</td></tr><tr><td>One foot on Slider: Reverse Plank forward</td><td>3</td><td>Both legs sideways / switch</td><td>3</td><td>Upper Body side hold</td><td>20s</td></tr></tbody></table><br><b>Zusatz:</b><br>20x attempts double jumps [cite: 103][cite_start]<br>20x attempts criss cross jumps [cite: 104][cite_start]<br>Shoulder hip movement on floor [cite: 105][cite_start]<br>Stretching in circle [cite: 106][cite_start]<br>Splits (1 min) [cite: 107]"
-      }
-    }
+    "FIG": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "FIG rekrutt": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Aspirant": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Stiege": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } }
+  },
+  "Week_4": {
+    "FIG": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "FIG rekrutt": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Aspirant": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Stiege": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } }
+  },
+  "Week_5": {
+    "FIG": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "FIG rekrutt": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Aspirant": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Stiege": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } }
+  },
+  "Week_6": {
+    "FIG": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "FIG rekrutt": { "Tuesday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Aspirant": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } },
+    "Stiege": { "Monday": { "15:30-16:15 Warm up": "warmup1.html" } }
   }
 }
