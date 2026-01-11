@@ -37,7 +37,6 @@
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; margin-bottom: 2px; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
 
-        /* Modal Anpassung für HTML-Dokumente */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 10px; width: 95%; max-width: 900px; height: 90vh; position: relative; display: flex; flex-direction: column; }
         .close { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; z-index: 10; }
@@ -83,10 +82,10 @@
 <script>
     const fullSchedule = {
         "FIG": {
-            "Monday": ["15:30-16:15 Training", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
             "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Beam", "17:45-18:30 Floor", "18:30-19:30 Strength/condit."],
             "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
-            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/beam", "18:00-18:30 Fysio/stretch"],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/beam", "18:00-18:30 Physio/Stretch"],
             "Saturday": ["09:00-10:00 Warm up", "10:00-10:45 Bars", "10:45-11:30 Beam", "11:30-12:15 Vault/floor", "12:15-13:00 Strength/condit."]
         },
         "FIG rekrutt": {
@@ -116,68 +115,3 @@
     function render() {
         document.getElementById('week-label').innerText = activeWeek;
         const body = document.getElementById('schedule-body');
-        body.innerHTML = '';
-
-        groups.forEach(group => {
-            const row = document.createElement('tr');
-            row.innerHTML = `<td class="group-name">${group}</td>`;
-            
-            days.forEach(day => {
-                const cell = document.createElement('td');
-                const units = fullSchedule[group][day];
-                
-                if (units) {
-                    cell.className = "day-cell";
-                    units.forEach(unit => {
-                        const [time, ...rest] = unit.split(' ');
-                        const name = rest.join(' ');
-                        const block = document.createElement('div');
-                        block.className = "apparatus-block";
-                        block.innerHTML = `<span class="time">${time}</span><span class="name">${name}</span>`;
-                        block.onclick = () => openModal(group, day, unit);
-                        cell.appendChild(block);
-                    });
-                } else {
-                    cell.className = "day-cell free";
-                    cell.innerText = "FRI";
-                }
-                row.appendChild(cell);
-            });
-            body.appendChild(row);
-        });
-    }
-
-    function setWeek(w) {
-        activeWeek = w;
-        document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById('btn-' + w).classList.add('active');
-        render();
-    }
-
-    function openModal(group, day, unit) {
-        let content = "No detailed plan available.";
-        if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
-            content = planContent[activeWeek][group][day][unit];
-        }
-
-        const modalBody = document.getElementById('modal-body');
-        if (content.endsWith(".html")) {
-            modalBody.innerHTML = `<iframe src="${content}"></iframe>`;
-        } else {
-            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2><p>${content}</p></div>`;
-        }
-        document.getElementById('planModal').style.display = 'flex';
-    }
-
-    function closeModal() { 
-        document.getElementById('planModal').style.display = 'none';
-        document.getElementById('modal-body').innerHTML = ''; // Cache leeren
-    }
-
-    fetch('data.json').then(r => r.json()).then(data => {
-        planContent = data;
-        render();
-    }).catch(() => render());
-</script>
-</body>
-</html>
