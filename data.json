@@ -22,7 +22,7 @@
         "17:45-18:30 Beam": "",
         "18:30-19:30 Strength/condit.": ""
       },
-  "Friday": {
+"Friday": {
         "15:30-16:00 Warm up": "dancing.html",
         "16:00-16:30 Basic lines": "",
         "16:30-17:15 Bars": "",
@@ -39,11 +39,11 @@
     },
     "FIG rekrutt": {
       "Tuesday": {
-        "15:30-16:15 Warm up": "",
+        "15:30-16:15 Warm up": "warmup1.html.html",
         "16:15-17:00 Vault/Floor": "",
         "17:00-17:45 Bars": "",
         "17:45-18:30 Beam": "",
-        "18:30-19:30 Strength/condit.": ""
+        "18:30-19:30 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Wednesday": {
         "15:30-16:00 Warm up": "",
@@ -91,7 +91,7 @@
       },
       "Friday": {
         "15:30-16:00 Warm up": "Dancing (Self-regulated)",
-        "16:00-16:30 Basics": "",
+        "16:00-16:30 Basics": "Flexibility.Conditioning.html",
         "16:30-17:15 Beam": "",
         "17:15-18:00 Bars": "",
         "18:00-18:45 Floor": "",
