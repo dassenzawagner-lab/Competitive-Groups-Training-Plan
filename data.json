@@ -13,7 +13,7 @@
         "16:15-17:00 Bars": "",
         "17:00-17:45 Beam": "",
         "17:45-18:30 Floor": "",
-        "18:30-19:30 Strength/condit.": ""
+        "18:30-19:30 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Thursday": {
         "15:30-16:15 Warm up": "",
@@ -43,7 +43,7 @@
         "16:15-17:00 Vault/Floor": "",
         "17:00-17:45 Bars": "",
         "17:45-18:30 Beam": "",
-        "18:30-19:30 Strength/condit.": ""
+        "18:30-19:30 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Wednesday": {
         "15:30-16:00 Warm up": "",
@@ -104,21 +104,21 @@
         "16:15-17:00 Floor/Vault": "",
         "17:00-17:45 Beam": "",
         "17:45-18:30 Bars": "",
-        "18:30-19:00 Strength/condit.": ""
+        "18:30-19:00 Strength/condit.": "Lasse"
       },
       "Wednesday": {
         "15:30-16:00 Warm up": "",
         "16:00-16:45 Bars": "",
         "16:45-17:30 Beam": "",
         "17:30-18:15 Vault": "",
-        "18:15-19:00 Strength/condit.": ""
+        "18:15-19:00 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Thursday": {
         "15:30-16:15 Warm up": "",
         "16:15-17:00 Beam": "",
         "17:00-17:45 Bars": "",
         "17:45-18:30 Floor": "",
-        "18:30-19:00 Strength/condit.": ""
+        "18:30-19:00 Strength/condit.": "Lasse"
       }
     }
   }
