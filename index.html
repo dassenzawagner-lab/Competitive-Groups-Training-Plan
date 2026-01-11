@@ -8,30 +8,19 @@
         :root { --dark: #1a2b3c; --bg: #f4f7f9; --accent: #0056b3; --white: #ffffff; }
         body { font-family: 'Segoe UI', Arial, sans-serif; background: var(--bg); margin: 0; padding: 0; }
         header { background: var(--dark); color: white; padding: 20px; text-align: center; }
-        
         .week-nav { display: flex; justify-content: center; gap: 10px; padding: 20px; background: white; border-bottom: 1px solid #ddd; flex-wrap: wrap; }
         .week-btn { padding: 10px 15px; cursor: pointer; border: 2px solid var(--dark); background: white; border-radius: 5px; font-weight: bold; }
         .week-btn.active { background: var(--dark); color: white; }
-
         .table-container { padding: 20px; overflow-x: auto; }
         table.main-schedule { width: 100%; border-collapse: separate; border-spacing: 8px; min-width: 1100px; }
         th { background: #e2e8f0; padding: 12px; border-radius: 5px; color: var(--dark); text-transform: uppercase; font-size: 0.85em; }
         .group-name { background: #cbd5e0; font-weight: bold; padding: 15px; border-radius: 5px; width: 120px; text-align: center; }
         .day-cell { background: #edf2f7; border-radius: 8px; padding: 10px; vertical-align: top; min-height: 150px; border: 1px solid #cbd5e1; }
-        
-        .apparatus-block {
-            background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px;
-            border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer;
-        }
+        .apparatus-block { background: var(--white); margin-bottom: 8px; padding: 8px; border-radius: 5px; border-left: 5px solid var(--accent); box-shadow: 0 2px 4px rgba(0,0,0,0.05); cursor: pointer; }
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
-
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; align-items: center; }
-        .modal-content { 
-            background: white; padding: 20px; border-radius: 12px; 
-            width: 95%; max-width: 1000px; height: 90vh; position: relative; overflow: hidden;
-            display: flex; flex-direction: column;
-        }
+        .modal-content { background: white; padding: 20px; border-radius: 12px; width: 95%; max-width: 1000px; height: 90vh; position: relative; overflow: hidden; display: flex; flex-direction: column; }
         .close { position: absolute; top: 10px; right: 20px; font-size: 35px; cursor: pointer; color: #333; z-index: 10; }
         #modal-body { flex-grow: 1; width: 100%; overflow-y: auto; margin-top: 40px; }
         iframe { width: 100%; height: 100%; border: none; }
@@ -42,17 +31,16 @@
 <header><h1>Gymnastics Training System 2026</h1></header>
 
 <div class="week-nav">
-    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3</button>
-    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4</button>
-    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5</button>
-    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6</button>
+    <button id="btn-Week_3" class="week-btn active" onclick="setWeek('Week_3')">KW 3 (12.01.-18.01.)</button>
+    <button id="btn-Week_4" class="week-btn" onclick="setWeek('Week_4')">KW 4 (19.01.-25.01.)</button>
+    <button id="btn-Week_5" class="week-btn" onclick="setWeek('Week_5')">KW 5 (26.01.-01.02.)</button>
+    <button id="btn-Week_6" class="week-btn" onclick="setWeek('Week_6')">KW 6 (02.02.-08.02.)</button>
 </div>
 
 <div class="table-container">
     <table class="main-schedule">
-        <thead>
-            <tr><th>Gruppe</th><th>Mo</th><th>Di</th><th>Mi</th><th>Do</th><th>Fr</th><th>Sa</th><th>So</th></tr>
-        </thead>
+        <thead id="schedule-head">
+            </thead>
         <tbody id="schedule-body"></tbody>
     </table>
 </div>
@@ -66,10 +54,37 @@
 
 <script>
     const fullSchedule = {
-        "FIG": { "Tuesday": ["15:30-16:15 Warm up"] },
-        "FIG rekrutt": { "Tuesday": ["15:30-16:15 Warm up"] },
-        "Stiege": { "Monday": ["15:30-16:15 Warm up"] },
-        "Aspirant": { "Monday": ["15:30-16:15 Warm up"] }
+        "FIG": {
+            "Monday": ["15:30-16:15 Training", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Beam", "17:45-18:30 Floor", "18:30-19:30 Strength/condit."],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/beam", "18:00-18:30 Fysio/stretch"],
+            "Saturday": ["09:00-10:00 Warm up", "10:00-10:45 Bars", "10:45-11:30 Beam", "11:30-12:15 Vault/floor", "12:15-13:00 Strength/condit."]
+        },
+        "FIG rekrutt": {
+            "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Vault/Floor", "17:00-17:45 Bars", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
+            "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Beam", "16:45-17:30 Floor", "17:30-18:15 Bars/Straps", "18:15-18:30 Strength/Stretch"],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Bars/Straps", "17:00-17:45 Vault", "17:45-18:30 Beam/Basics", "18:30-19:30 Strength/condit."],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/Beam", "18:00-18:30 Physio/Stretch"]
+        },
+        "Stiege": {
+            "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Beam", "17:00-17:45 Bars", "17:45-18:30 Vault", "18:30-19:00 Strength/condit."],
+            "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Floor", "16:45-17:30 Bars", "17:30-18:15 Beam", "18:15-19:00 Strength/condit."],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Vault", "17:00-17:45 Beam", "17:45-18:30 Bars", "18:30-19:00 Strength/condit."],
+            "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basics", "16:30-17:15 Beam", "17:15-18:00 Bars", "18:00-18:45 Floor", "18:45-19:00 Stretch"]
+        },
+        "Aspirant": {
+            "Monday": ["15:30-16:15 Warm up", "16:15-17:00 Floor/Vault", "17:00-17:45 Beam", "17:45-18:30 Bars", "18:30-19:00 Strength/condit."],
+            "Wednesday": ["15:30-16:00 Warm up", "16:00-16:45 Bars", "16:45-17:30 Beam", "17:30-18:15 Vault", "18:15-19:00 Strength/condit."],
+            "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Beam", "17:00-17:45 Bars", "17:45-18:30 Floor", "18:30-19:00 Strength/condit."]
+        }
+    };
+
+    const weekDates = {
+        "Week_3": ["Mo 12.01.", "Di 13.01.", "Mi 14.01.", "Do 15.01.", "Fr 16.01.", "Sa 17.01.", "So 18.01."],
+        "Week_4": ["Mo 19.01.", "Di 20.01.", "Mi 21.01.", "Do 22.01.", "Fr 23.01.", "Sa 24.01.", "So 25.01."],
+        "Week_5": ["Mo 26.01.", "Di 27.01.", "Mi 28.01.", "Do 29.01.", "Fr 30.01.", "Sa 31.01.", "So 01.02."],
+        "Week_6": ["Mo 02.02.", "Di 03.02.", "Mi 04.02.", "Do 05.02.", "Fr 06.02.", "Sa 07.02.", "So 08.02."]
     };
 
     let activeWeek = "Week_3"; 
@@ -78,6 +93,16 @@
     const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
 
     function render() {
+        // Kopfzeile mit Daten rendern
+        const head = document.getElementById('schedule-head');
+        let headHTML = `<tr><th>Gruppe</th>`;
+        weekDates[activeWeek].forEach(date => {
+            headHTML += `<th>${date}</th>`;
+        });
+        headHTML += `</tr>`;
+        head.innerHTML = headHTML;
+
+        // Body rendern
         const body = document.getElementById('schedule-body');
         body.innerHTML = ''; 
         groups.forEach(group => {
@@ -104,20 +129,20 @@
 
     function openModal(group, day, unit) {
         let content = "";
-        // Überprüft Woche, Gruppe, Tag und Einheit
         if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
             content = planContent[activeWeek][group][day][unit];
         }
         const modalBody = document.getElementById('modal-body');
-        if (content.endsWith(".html")) {
+        if (content && content.endsWith(".html")) {
             modalBody.innerHTML = `<iframe src="${content}"></iframe>`;
         } else {
-            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2>${content}</div>`;
+            modalBody.innerHTML = `<div style="padding:20px;"><h2>${unit}</h2>${content || "Kein Plan hinterlegt."}</div>`;
         }
         document.getElementById('planModal').style.display = 'flex';
     }
 
     function closeModal() { document.getElementById('planModal').style.display = 'none'; }
+    
     function setWeek(w) { 
         activeWeek = w; 
         document.querySelectorAll('.week-btn').forEach(b => b.classList.remove('active'));
@@ -125,7 +150,10 @@
         render(); 
     }
 
-    fetch('data.json').then(r => r.json()).then(data => { planContent = data; render(); }).catch(() => render());
+    fetch('data.json').then(r => r.json()).then(data => { 
+        planContent = data; 
+        render(); 
+    }).catch(() => render());
 </script>
 </body>
 </html>
