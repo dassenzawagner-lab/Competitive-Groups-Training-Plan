@@ -38,20 +38,15 @@
         .time { display: block; font-weight: bold; color: var(--accent); font-size: 0.85em; margin-bottom: 2px; }
         .name { display: block; font-size: 0.9em; font-weight: 500; }
 
-        /* Modal Styling */
         .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
         .modal-content { background: white; padding: 20px; border-radius: 10px; width: 95%; max-width: 900px; height: 90vh; position: relative; display: flex; flex-direction: column; }
         .close { position: absolute; top: 10px; right: 20px; font-size: 30px; cursor: pointer; z-index: 10; }
-        
-        /* Button zum Drucken des Modal-Inhalts */
         .modal-print-btn { background: #0056b3; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer; margin-bottom: 10px; align-self: flex-start; font-weight: bold; }
 
         #modal-body { flex-grow: 1; width: 100%; overflow-y: auto; }
         iframe { width: 100%; height: 100%; border: none; }
 
-        /* DRUCK-EINSTELLUNGEN */
         @media print { 
-            /* Wenn wir drucken, verstecken wir ALLES außer dem Modal-Inhalt */
             body * { visibility: hidden; }
             #modal-body, #modal-body * { visibility: visible; }
             #modal-body { position: absolute; left: 0; top: 0; width: 100%; }
@@ -95,7 +90,7 @@
 <div id="planModal" class="modal" onclick="closeModal()">
     <div class="modal-content" onclick="event.stopPropagation()">
         <span class="close" onclick="closeModal()">&times;</span>
-        <button class="modal-print-btn no-print" onclick="printModal()">Download / Print Detail</button>
+        <button id="print-btn" class="modal-print-btn no-print" onclick="printModal()">Download / Print Detail</button>
         <div id="modal-body"></div>
     </div>
 </div>
@@ -107,7 +102,7 @@
             "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Beam", "17:45-18:30 Floor", "18:30-19:30 Strength/condit."],
             "Thursday": ["15:30-16:15 Warm up", "16:15-17:00 Bars", "17:00-17:45 Vault", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
             "Friday": ["15:30-16:00 Warm up", "16:00-16:30 Basic lines", "16:30-17:15 Bars", "17:15-18:00 Floor/beam", "18:00-18:30 Strength/condit"],
-            "Saturday": ["09:00-10:00 Warm up", "10:00-10:45 Bars", "10:45-11:30 Beam", "11:30-12:15 Vault/floor", "12:15-13:00 Physio/stretch."]
+            "Saturday": ["09:00-10:00 Warm up", "10:00-10:45 Bars", "10:45-11:30 Beam", "11:30-12:15 Vault/floor", "12:15-13:00 Physio/Stretch"]
         },
         "FIG rekrutt": {
             "Tuesday": ["15:30-16:15 Warm up", "16:15-17:00 Vault/Floor", "17:00-17:45 Bars", "17:45-18:30 Beam", "18:30-19:30 Strength/condit."],
@@ -157,8 +152,9 @@
                 if (units) {
                     cell.className = "day-cell";
                     units.forEach(unit => {
-                        const [time, ...rest] = unit.split(' ');
-                        const name = rest.join(' ');
+                        const parts = unit.split(' ');
+                        const time = parts.shift();
+                        const name = parts.join(' ');
                         const block = document.createElement('div');
                         block.className = "apparatus-block";
                         block.innerHTML = `<span class="time">${time}</span><span class="name">${name}</span>`;
@@ -167,7 +163,7 @@
                     });
                 } else {
                     cell.className = "day-cell free";
-                    cell.innerText = "FRI";
+                    cell.innerText = "FREE";
                 }
                 row.appendChild(cell);
             });
@@ -183,27 +179,48 @@
     }
 
     function openModal(group, day, unit) {
-        let content = "No detailed plan available.";
-        if (planContent[activeWeek]?.[group]?.[day]?.[unit]) {
-            content = planContent[activeWeek][group][day][unit];
-        }
+        let content = planContent[activeWeek]?.[group]?.[day]?.[unit] || "No detailed plan available.";
         const modalBody = document.getElementById('modal-body');
-        if (content.endsWith(".html")) {
+        const printBtn = document.getElementById('print-btn');
+        
+        // Prüfen ob mehrere Dateien vorhanden sind (mit Komma getrennt)
+        if (content.includes(',')) {
+            const fileList = content.split(',').map(f => f.trim());
+            modalBody.innerHTML = `<div style="padding:20px;"><h2>Double Plan</h2><p>This session has two parts. Please open both:</p></div>`;
+            fileList.forEach(file => {
+                const btn = document.createElement('button');
+                btn.className = 'modal-print-btn';
+                btn.style.margin = '10px';
+                btn.innerText = 'Open: ' + file;
+                btn.onclick = () => window.open(file, '_blank');
+                modalBody.appendChild(btn);
+            });
+            printBtn.style.display = 'none';
+        } 
+        // Prüfen ob es eine HTML Datei ist
+        else if (content.toLowerCase().endsWith(".html")) {
             modalBody.innerHTML = `<iframe id="print-iframe" src="${content}"></iframe>`;
-        } else {
-            modalBody.innerHTML = `<div id="print-content" style="padding:20px;"><h2>${unit}</h2><p>${content}</p></div>`;
+            printBtn.style.display = 'block';
+        } 
+        // Sonst als reinen Text anzeigen
+        else {
+            modalBody.innerHTML = `<div id="print-content" style="padding:20px; text-align:center;">
+                <h2 style="color:var(--accent);">${unit}</h2>
+                <hr>
+                <p style="font-size:1.2em; margin-top:30px;">${content}</p>
+            </div>`;
+            printBtn.style.display = 'block';
         }
+        
         document.getElementById('planModal').style.display = 'flex';
     }
 
     function printModal() {
         const iframe = document.getElementById('print-iframe');
         if (iframe) {
-            // Wenn der Inhalt ein HTML Dokument (Iframe) ist
             iframe.contentWindow.focus();
             iframe.contentWindow.print();
         } else {
-            // Wenn der Inhalt nur Text ist
             window.print();
         }
     }
@@ -216,7 +233,10 @@
     fetch('data.json').then(r => r.json()).then(data => {
         planContent = data;
         render();
-    }).catch(() => render());
+    }).catch(e => {
+        console.error("Error loading JSON:", e);
+        render();
+    });
 </script>
 </body>
 </html>
