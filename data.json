@@ -3,37 +3,37 @@
     "FIG": {
       "Monday": {
         "15:30-16:15 Warm up": "Old Warm up",
-        "16:15-17:00 Bars": "",
-        "17:00-17:45 Vault": "",
-        "17:45-18:30 Beam": "",
-        "18:30-19:30 Strength/condit.": ""
+        "16:15-17:00 Bars": "basics+straps",
+        "17:00-17:45 Vault": "Running school + stations and positioning",
+        "17:45-18:30 Beam": "Stability warm up + acro + new elements",
+        "18:30-19:30 Strength/condit.": "Arms Plan"
       },
       "Tuesday": {
         "15:30-16:15 Warm up": "warmup1.html.html",
-        "16:15-17:00 Bars": "",
-        "17:00-17:45 Beam": "",
-        "17:45-18:30 Floor": "",
+        "16:15-17:00 Bars": "Full energy",
+        "17:00-17:45 Beam": "Stability warm up + Turns and basic elements",
+        "17:45-18:30 Floor": "Stations elements + basic jumps",
         "18:30-19:30 Strength/condit.": "Flexibility.Conditioning.html"
       },
       "Thursday": {
-        "15:30-16:15 Warm up": "Lara`s Warm up",
-        "16:15-17:00 Bars": "",
-        "17:00-17:45 Vault": "",
-        "17:45-18:30 Beam": "",
+        "15:30-16:15 Warm up": "Lara's Warm up",
+        "16:15-17:00 Bars": "basics + straps + stations",
+        "17:00-17:45 Vault": "Full energy",
+        "17:45-18:30 Beam": "Flexibility balance warm up + jumps + Mounts and dismounts",
         "18:30-19:30 Strength/condit.": "Leg.workout.html"
       },
-"Friday": {
+      "Friday": {
         "15:30-16:00 Warm up": "Dancing (Self-regulated)",
         "16:00-16:30 Basic lines": "",
-        "16:30-17:15 Bars": "",
-        "17:15-18:00 Floor/beam": "",
+        "16:30-17:15 Bars": "routines + shaping + elements?",
+        "17:15-18:00 Floor/beam": "Full energy/ routines walk through + basics",
         "18:00-18:30 Strength/condit": "core_plan.html"
       },
       "Saturday": {
-        "09:00-10:00 Warm up": "warmup1.html.html",
-        "10:00-10:45 Bars": "",
-        "10:45-11:30 Beam": "",
-        "11:30-12:15 Vault/floor": "",
+        "09:00-10:00 Warm up": "warmup1.html.html, rsg.stretch.html",
+        "10:00-10:45 Bars": "Basic + straps",
+        "10:45-11:30 Beam": "Routines",
+        "11:30-12:15 Vault/floor": "Ey jumps + routines and jumps",
         "12:15-13:00 Physio/Stretch": "Physio.html"
       }
     },
